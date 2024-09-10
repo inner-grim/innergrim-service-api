@@ -15,5 +15,12 @@
 - ## How To Start
   - [Local] gradlew :module-app:bootrun --args='--spring.profiles.active=local'
 
+- ## [Local]
+  - DB : H2DB
+    - 접속 Url : http://localhost:8080/h2-console
+    - JDBC Url : jdbc:h2:mem:testdb
+    - User Name : sa
+    - Password : 없음
+
 
 [//]: # (잔디먹는 뱀 적용법 , https://aeda.tistory.com/m/21)
