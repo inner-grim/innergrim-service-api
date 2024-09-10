@@ -1,0 +1,30 @@
+
+# DB 종류
+database: h2db
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    driverClassName: org.h2.Driver
+    #url: jdbc:h2:file:./target/h2db/db/application;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:testdb;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+
+  sql:
+    # DB초기화(schema.sql, data.sql) , [always : 기동 시 매번 동작, never : 기동 시 동작하지 않음]
+    init:
+      schema-locations: classpath*:initdata/${database}/schema.sql
+      data-locations: classpath*:initdata/${database}/data.sql
+      #schema-locations: classpath*:initdata/h2db/schema.sql
+      #data-locations: classpath*:initdata/h2db/data.sql
+      mode: always
+  jpa:
+    #jpa 사용 환경에서 data.sql을 정상적으로 동작하게 하는 옵션
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
+    show-sql: true
