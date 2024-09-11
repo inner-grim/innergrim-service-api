@@ -8,6 +8,7 @@ plugins {
 }
 
 dependencies {
+	implementation(project(":module-core"))
 }
 
 // Disable the bootJar task

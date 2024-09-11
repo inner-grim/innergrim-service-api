@@ -8,6 +8,5 @@ CREATE TABLE IF NOT EXISTS tb_sample (
 
 CREATE TABLE IF NOT EXISTS tb_user (
     id bigint auto_increment primary key comment 'ID',
-    name varchar(255) not null comment '이름',
-    email varchar(255) not null comment '이메일'
+    name varchar(255) not null comment '이름'
 ) CHARSET=UTF8;
