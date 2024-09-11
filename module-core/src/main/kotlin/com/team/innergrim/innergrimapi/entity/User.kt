@@ -1,5 +1,6 @@
 package com.team.innergrim.innergrimapi.entity
 
+import com.team.innergrim.innergrimapi.base.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -10,7 +11,7 @@ import org.hibernate.annotations.Comment
 
 @Entity
 @Table(name = "tb_user")
-class User {
+class User : BaseEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
