@@ -10,8 +10,10 @@ import jakarta.persistence.Table
 import org.hibernate.annotations.Comment
 
 @Entity
-@Table(name = "tb_user")
-class User : BaseEntity() {
+@Table(name = "member")
+class Member(
+    name : String
+) : BaseEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +23,6 @@ class User : BaseEntity() {
 
     @Comment("이름")
     @Column(name = "name", nullable = false, length = 255)
-    lateinit var name: String
+    var name: String = name
 
 }

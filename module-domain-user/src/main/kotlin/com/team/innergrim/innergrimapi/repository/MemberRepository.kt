@@ -1,9 +1,9 @@
 package com.team.innergrim.innergrimapi.repository
 
-import com.team.innergrim.innergrimapi.entity.User
+import com.team.innergrim.innergrimapi.entity.Member
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepository : JpaRepository<User, Long> {
+interface MemberRepository : JpaRepository<Member, Long> {
 }
