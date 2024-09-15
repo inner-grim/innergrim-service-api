@@ -11,9 +11,7 @@ import org.hibernate.annotations.Comment
 
 @Entity
 @Table(name = "member")
-class Member(
-    name : String
-) : BaseEntity() {
+class Member() : BaseEntity() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +21,11 @@ class Member(
 
     @Comment("이름")
     @Column(name = "name", nullable = false, length = 255)
-    var name: String = name
+    lateinit var name: String
+
+    // name을 인자로 받는 부 생성자
+    constructor(name: String) : this() {
+        this.name = name
+    }
 
 }

@@ -15,12 +15,12 @@ class MemberController(private val memberService: MemberService) {
 
     @GetMapping
     fun getMembers(): List<Member> {
-        return memberService.getMembers();
+        return memberService.getMembers()
     }
 
     @GetMapping("/{id}")
     fun getMemberDetail(@PathVariable("id") id: Long): Member {
-        return memberService.getMemberDetail(id);
+        return memberService.getMemberDetail(id)
     }
 
 }

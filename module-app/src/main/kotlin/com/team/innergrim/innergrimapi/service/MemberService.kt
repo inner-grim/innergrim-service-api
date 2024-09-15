@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class MemberService (private val memberDomainService: MemberDomainService) {
 
     fun getMembers(): List<Member> {
-        return memberDomainService.getMembers();
+        return memberDomainService.getMembers()
     }
 
     fun getMemberDetail(id: Long): Member {
@@ -16,7 +16,7 @@ class MemberService (private val memberDomainService: MemberDomainService) {
         val searchMember = Search()
         searchMember.classInfo(Member(name = "member1"))
 
-        return memberDomainService.getMemberDetail(id).get();
+        return memberDomainService.getMemberDetail(id).get()
     }
 
 }
