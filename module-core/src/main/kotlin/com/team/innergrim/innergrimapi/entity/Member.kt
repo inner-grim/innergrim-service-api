@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.annotations.Comment
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "member")
@@ -24,8 +25,9 @@ class Member() : BaseEntity() {
     lateinit var name: String
 
     // name을 인자로 받는 부 생성자
-    constructor(name: String) : this() {
+    constructor(name: String, createdAt : LocalDateTime) : this() {
         this.name = name
+        this.createdAt = createdAt
     }
 
 }

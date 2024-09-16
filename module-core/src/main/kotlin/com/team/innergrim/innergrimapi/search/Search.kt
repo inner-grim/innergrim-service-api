@@ -2,27 +2,36 @@ package com.team.innergrim.innergrimapi.search
 
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
+import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.full.starProjectedType
+import kotlin.reflect.jvm.isAccessible
 
-class Search {
+class Search<T : Any>(
+    entityClass: T
+) {
 
-    fun classInfo (myClass: Any) {
-        var arg = myClass::class
+    private val propertiesMap = mutableMapOf<String, Any?>()
 
-        println("class info")
-        println("isAbstract : ${arg.isAbstract}") // 클래스가 abstract로 선언되었는지 판단
-        println("isCompanion :  ${arg.isCompanion}") // 클래스가 companion로 선언되었는지 판단
-        println("isData : ${arg.isData}") // 클래스가 data로 선언되었는지 판단
-        println("isFinal : ${arg.isFinal}") // 클래스가 final로 선언되었는지 판단
-        println("isInner : ${arg.isInner}") // 클래스가 inner로 선언되었는지 판단
-        println("isOpen : ${arg.isOpen}") // 클래스가 open으로 선언되었는지 판단
-        println("isSealed : ${arg.isSealed}") // 클래스가 sealed로 선언되었는지 판단
+    init {
+        // 생성자에서 entityClass의 정보를 처리
+        processClassProperties(entityClass::class, entityClass)
+    }
 
-        for (prop in arg.memberProperties) {
-            // Get property name and value
+    // 클래스의 프로퍼티를 처리하여 저장
+    private fun processClassProperties(kClass: KClass<*>, obj: T) {
+        println("Processing class info for: ${kClass.simpleName}")
+
+        for (prop in kClass.memberProperties) {
+            prop.isAccessible = true // 비공개 프로퍼티 접근 허용
             val name = prop.name
-            val type = prop.returnType // 프로퍼티 타입 확인
-            val value = prop.getter.call(myClass)
-            println("Property name: $name, type: $type , value: $value")
+            val value = prop.getter.call(obj)
+            println("Property name: $name, value: $value")
+            propertiesMap[name] = value // 프로퍼티 이름과 값을 맵에 저장
         }
+    }
+
+    // 프로퍼티를 조회하는 메서드
+    fun getPropertyMap(): Map<String, Any?> {
+        return propertiesMap
     }
 }
