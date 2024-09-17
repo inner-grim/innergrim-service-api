@@ -9,7 +9,7 @@ plugins {
 
 dependencies {
 	implementation(project(":module-core"))
-	implementation(project(":module-domain-user"))
+	implementation(project(":module-domain-member"))
 }
 
 tasks.withType<KotlinCompile> {

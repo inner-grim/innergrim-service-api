@@ -1,0 +1,31 @@
+package com.team.innergrim.innergrimapi.repository.specification
+
+import com.team.innergrim.innergrimapi.dto.SearchMemberDto
+import com.team.innergrim.innergrimapi.entity.Member
+import com.team.innergrim.innergrimapi.entity.Membership
+import org.springframework.data.jpa.domain.Specification
+
+object MemberSpecification {
+
+    fun setSpecification (searchDto: SearchMemberDto) : Specification<Member> {
+
+        var spec: Specification<Member> = Specification.where(null)
+
+        // 이름
+        if (!searchDto.name.isNullOrEmpty()) {
+            spec = spec.and(Specification { root, query, criteriaBuilder ->
+                criteriaBuilder.equal(root.get<String>("name"), searchDto.name)
+            })
+        }
+
+        // 멤버십
+        if (searchDto.membershipId != null) {
+            spec = spec.and(Specification { root, query, criteriaBuilder ->
+                criteriaBuilder.equal(root.get<Membership>("membership").get<Long>("id"), searchDto.membershipId)
+            })
+        }
+
+        return spec
+    }
+
+}
