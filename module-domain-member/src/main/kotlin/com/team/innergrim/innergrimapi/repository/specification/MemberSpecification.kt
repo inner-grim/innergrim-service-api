@@ -11,6 +11,13 @@ object MemberSpecification {
 
         var spec: Specification<Member> = Specification.where(null)
 
+        // ID
+        if (searchDto.id != null) {
+            spec = spec.and(Specification { root, query, criteriaBuilder ->
+                criteriaBuilder.equal(root.get<Long>("id"), searchDto.id)
+            })
+        }
+
         // 이름
         if (!searchDto.name.isNullOrEmpty()) {
             spec = spec.and(Specification { root, query, criteriaBuilder ->

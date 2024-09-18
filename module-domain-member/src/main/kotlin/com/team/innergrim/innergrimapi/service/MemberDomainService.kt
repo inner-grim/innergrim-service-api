@@ -2,6 +2,7 @@ package com.team.innergrim.innergrimapi.service
 
 import com.team.innergrim.innergrimapi.entity.Member
 import com.team.innergrim.innergrimapi.repository.MemberRepository
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import java.util.Optional
 
@@ -14,6 +15,10 @@ class MemberDomainService (private val memberRepository: MemberRepository) {
 
     fun getMemberDetail (id: Long): Optional<Member> {
         return memberRepository.findById(id);
+    }
+
+    fun getMemberDetail(specification: Specification<Member>): Optional<Member> {
+        return memberRepository.findOne(specification);
     }
 
 }

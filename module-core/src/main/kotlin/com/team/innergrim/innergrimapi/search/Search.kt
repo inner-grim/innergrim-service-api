@@ -6,6 +6,7 @@ import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.jvm.isAccessible
 
+// TODO: Not Use 필요 없으면 삭제 예정
 class Search<T : Any>(
     entityClass: T
 ) {
