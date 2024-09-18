@@ -41,6 +41,15 @@ subprojects {
 		// H2 Database
 		runtimeOnly("com.h2database:h2")
 
+		// SpringDoc (Swagger)
+		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+
+		// Redis
+		implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+		// Embeded Redis (Local용)
+		implementation("it.ozimov:embedded-redis:0.7.2")
+
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
