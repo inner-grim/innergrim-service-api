@@ -34,19 +34,19 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          
+
       # Discord Webhook notification
       - name: Send Discord Notification
         if: always() # 실행 성공/실패 상관없이 알림을 보냄
         run: |
           curl -H "Content-Type: application/json" \
           -X POST \
-          -d '{
-              "content": " ::::: Notification ::::: \n\n
-                         1.Repository : ${{ github.repository }}\n
-                         2.Branch : ${{ github.ref }}\n
-                         3.Event Type : ${{ github.event_name }}\n
-                         4.Event Time : ${{ github.event.head_commit.timestamp }}\n
-                         5.Commit Message : ${{ github.event.head_commit.message }}\n
-                         6.Job Status: ${{ job.status }}"}' \
+          -d "{\"content\": \" ::::: Event Notification ::::: \n \
+                            \n [Event Time]: ${{ github.event.head_commit.timestamp }} \
+                            \n [Event Type]: ${{ github.event_name }} \
+                            \n [Repository]: ${{ github.repository }} \
+                            \n [Branch]: ${{ github.ref }} \
+                            \n [Commit Message]: ${{ github.event.head_commit.message }} \
+                            \n [Job Status] : ${{ job.status }} \
+          \"}" \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
