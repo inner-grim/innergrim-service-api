@@ -42,16 +42,16 @@ jobs:
           STATUS_COLOR=$([[ "${{ job.status }}" == "success" ]] && echo "3066993" || echo "15158332")
           curl -H "Content-Type: application/json" \
           -X POST \
-          -d '{
-              "embeds": [{
-                "title": "**CI/CD Pipeline Notification**",
-                "description": "**Repository**: ${{ github.repository }}
-                               **Branch**: ${{ github.ref }}
-                               **Event**: ${{ github.event_name }}
-                               **Push Time**: ${{ github.event.head_commit.timestamp }}
-                               **Commit Message**: ${{ github.event.head_commit.message }}
-                               **Status**: ${{ job.status }}",
-                "color": '${STATUS_COLOR}'
+          -d "{
+              \"embeds\": [{
+                \"title\": \"**CI/CD Pipeline Notification**\",
+                \"description\": \"**Repository**: ${{ github.repository }}\n
+                                 **Branch**: ${{ github.ref }}\n
+                                 **Event**: ${{ github.event_name }}\n
+                                 **Push Time**: ${{ github.event.head_commit.timestamp }}\n
+                                 **Commit Message**: ${{ github.event.head_commit.message }}\n
+                                 **Status**: ${{ job.status }}\",
+                \"color\": $STATUS_COLOR
               }]
-          }' \
+          }" \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
