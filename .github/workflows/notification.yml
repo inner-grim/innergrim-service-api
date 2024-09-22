@@ -6,9 +6,9 @@ name: Notification
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "develop" ]
+    branches: [ "feature/discord-notification" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "feature/discord-notification" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -39,14 +39,19 @@ jobs:
       - name: Send Discord Notification
         if: always() # 실행 성공/실패 상관없이 알림을 보냄
         run: |
+          STATUS_COLOR=$([[ "${{ job.status }}" == "success" ]] && echo "3066993" || echo "15158332")
           curl -H "Content-Type: application/json" \
           -X POST \
           -d '{
-              "content": " ::::: Notification ::::: \n\n
-                         1.Repository : ${{ github.repository }}\n
-                         2.Branch : ${{ github.ref }}\n
-                         3.Event Type : ${{ github.event_name }}\n
-                         4.Event Time : ${{ github.event.head_commit.timestamp }}\n
-                         5.Commit Message : ${{ github.event.head_commit.message }}\n
-                         6.Job Status: ${{ job.status }}"}' \
+              "embeds": [{
+                "title": "**CI/CD Pipeline Notification**",
+                "description": "**Repository**: ${{ github.repository }}\n
+                               **Branch**: ${{ github.ref }}\n
+                               **Event**: ${{ github.event_name }}\n
+                               **Push Time**: ${{ github.event.head_commit.timestamp }}\n
+                               **Commit Message**: ${{ github.event.head_commit.message }}\n
+                               **Status**: ${{ job.status }}",
+                "color": '${STATUS_COLOR}'
+              }]
+          }' \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
