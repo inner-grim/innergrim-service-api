@@ -9,8 +9,6 @@ on:
     branches: [ "feature/pr-test" ]
   pull_request:
     branches: [ "feature/pr-test" ]
-  merge:
-    branches: [ "feature/pr-test" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -49,9 +47,16 @@ jobs:
 
           # Construct issue link (modify according to your needs)
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            ISSUE_LINK="${{ github.event.pull_request.html_url }}"
+            if [ "${{ github.event.action }}" == "closed" ] && [ "${{ github.event.pull_request.merged }}" == "true" ]; then
+              ISSUE_LINK="${{ github.event.pull_request.html_url }}"
+              TITLE="PR Merged"
+            else
+              ISSUE_LINK="${{ github.event.pull_request.html_url }}"
+              TITLE="Pull Request Event"
+            fi
           else
             ISSUE_LINK="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+            TITLE="Push Event"
           fi
 
           # Send the notification
