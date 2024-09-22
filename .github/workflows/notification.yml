@@ -42,6 +42,6 @@ jobs:
           curl -H "Content-Type: application/json" \
           -X POST \
           -d "{\"content\": \" ::::: Event Notification ::::: \
-          \n ::: Build status : ${{ job.status }} /
+          \n ::: Build status : ${{ job.status }} \
           \"}" \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
