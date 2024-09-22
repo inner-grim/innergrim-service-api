@@ -9,6 +9,8 @@ on:
     branches: [ "feature/pr-test" ]
   pull_request:
     branches: [ "feature/pr-test" ]
+  merge:
+    branches: [ "feature/pr-test" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
