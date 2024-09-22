@@ -42,6 +42,11 @@ jobs:
           curl -H "Content-Type: application/json" \
           -X POST \
           -d "{\"content\": \" ::::: Event Notification ::::: \
-          \n ::: Build status : ${{ job.status }} \
+                            \n 1.Repository: ${{ github.repository }} \
+                            \n 2.Branch: ${{ github.ref }} \
+                            \n 3.Event Type: ${{ github.event_name }} \
+                            \n 4.Event Time: ${{ github.event.head_commit.timestamp }} \
+                            \n 5.Commit Message: ${{ github.event.head_commit.message }} \
+                            \n 6.Job Status : ${{ job.status }} \
           \"}" \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
