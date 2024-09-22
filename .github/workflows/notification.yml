@@ -39,19 +39,7 @@ jobs:
       - name: Send Discord Notification
         if: always() # 실행 성공/실패 상관없이 알림을 보냄
         run: |
-          STATUS_COLOR=$([[ "${{ job.status }}" == "success" ]] && echo "3066993" || echo "15158332")
           curl -H "Content-Type: application/json" \
           -X POST \
-          -d "{
-              \"embeds\": [{
-                \"title\": \"**CI/CD Pipeline Notification**\",
-                \"description\": \"**Repository**: ${{ github.repository }}\n
-                                 **Branch**: ${{ github.ref }}\n
-                                 **Event**: ${{ github.event_name }}\n
-                                 **Push Time**: ${{ github.event.head_commit.timestamp }}\n
-                                 **Commit Message**: ${{ github.event.head_commit.message }}\n
-                                 **Status**: ${{ job.status }}\",
-                \"color\": \"$STATUS_COLOR\"
-              }]
-          }" \
+          -d "{\"content\": \" ::::: Event Notification ::::: Build status: ${{ job.status }}\"}" \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
