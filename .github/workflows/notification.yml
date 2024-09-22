@@ -39,14 +39,30 @@ jobs:
       - name: Send Discord Notification
         if: always() # 실행 성공/실패 상관없이 알림을 보냄
         run: |
+          # Determine color based on job status
+          STATUS_COLOR=$([[ "${{ job.status }}" == "success" ]] && echo "3066993" || echo "15158332")
+
+          # Extract branch name from ref
+          BRANCH_NAME=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+
+          # Construct issue link (modify according to your needs)
+          ISSUE_LINK="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+
+          # Send the notification
           curl -H "Content-Type: application/json" \
           -X POST \
-          -d "{\"content\": \" ::::: Event Notification ::::: \
-                            \n [Repository]: ${{ github.repository }} \
-                            \n [Branch]: ${{ github.ref }} \
-                            \n [Event Type]: ${{ github.event_name }} \
-                            \n [Event Time]: ${{ github.event.head_commit.timestamp }} \
-                            \n [Commit Message]: ${{ github.event.head_commit.message }} \
-                            \n [Job Status] : ${{ job.status }} \
-          \"}" \
+          -d "{\"embeds\": [{
+              \"title\": \"::::: Event Notification :::::\", \
+              \"description\": \"**Event Time**: ${{ github.event.head_commit.timestamp }}\n \
+                                 **Event Type**: ${{ github.event_name }}\n \
+                                 **Repository**: ${{ github.repository }}\n \
+                                 **Branch**: $BRANCH_NAME\n \
+                                 **Commit Message**: ${{ github.event.head_commit.message }}\n \
+                                 **Job Status**: ${{ job.status }}\", \
+              \"color\": $STATUS_COLOR, \
+              \"url\": \"$ISSUE_LINK\", \
+              \"footer\": { \
+                \"text\": \"Click the link above to view the commit.\" \
+              } \
+          }]}" \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
