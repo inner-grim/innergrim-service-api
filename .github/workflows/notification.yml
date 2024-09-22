@@ -46,19 +46,23 @@ jobs:
           BRANCH_NAME=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
 
           # Construct issue link (modify according to your needs)
-          ISSUE_LINK="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            ISSUE_LINK="${{ github.event.pull_request.html_url }}"
+          else
+            ISSUE_LINK="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+          fi
 
           # Send the notification
           curl -H "Content-Type: application/json" \
           -X POST \
           -d "{\"embeds\": [{
               \"title\": \"::::: Event Notification :::::\", \
-              \"description\": \"**Event Time**: ${{ github.event.head_commit.timestamp }}\n \
-                                 **Event Type**: ${{ github.event_name }}\n \
-                                 **Repository**: ${{ github.repository }}\n \
-                                 **Branch**: $BRANCH_NAME\n \
-                                 **Commit Message**: ${{ github.event.head_commit.message }}\n \
-                                 **Job Status**: ${{ job.status }}\", \
+              \"description\": \"[Event Time]: ${{ github.event.head_commit.timestamp }}\n \
+                                 [Event Type]: ${{ github.event_name }}\n \
+                                 [Repository]: ${{ github.repository }}\n \
+                                 [Branch]: $BRANCH_NAME\n \
+                                 [Commit Message]: ${{ github.event.head_commit.message }}\n \
+                                 [Job Status]: ${{ job.status }}\", \
               \"color\": $STATUS_COLOR, \
               \"url\": \"$ISSUE_LINK\", \
               \"footer\": { \
