@@ -1,0 +1,65 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "develop" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+      # Discord Webhook notification
+      - name: Send Discord Notification
+        if: always() # 실행 성공/실패 상관없이 알림을 보냄
+        run: |
+          # Determine color based on job status
+          STATUS_COLOR=$([[ "${{ job.status }}" == "success" ]] && echo "3066993" || echo "15158332")
+
+          # Extract branch name from ref
+          BRANCH_NAME=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+          
+          ISSUE_LINK="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+          TITLE="::::: Push Notification :::::"
+          DESCRIPTION="**Event Time**: ${{ github.event.head_commit.timestamp }}\n \
+                        **Event Type**: ${{ github.event_name }}\n \
+                        **Repository**: ${{ github.repository }}\n \
+                        **Branch**: $BRANCH_NAME\n \
+                        **Commit Message**: ${{ github.event.head_commit.message }}\n \
+                        **Job Status**: ${{ job.status }}"
+          
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d "{\"embeds\": [{ \
+              \"title\": \"$TITLE\", \
+              \"description\": \"$DESCRIPTION\", \
+              \"color\": $STATUS_COLOR, \
+              \"url\": \"$ISSUE_LINK\", \
+              \"footer\": { \
+                \"text\": \"Click the link above to view the details.\" \
+              } \
+          }]}" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}

@@ -5,8 +5,8 @@ name: Notification
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "develop" ]
+#  push:
+#    branches: [ "develop"]
   pull_request:
     branches: [ "develop" ]
 
@@ -34,19 +34,51 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-
+          
       # Discord Webhook notification
       - name: Send Discord Notification
         if: always() # 실행 성공/실패 상관없이 알림을 보냄
         run: |
+          # Determine color based on job status
+          STATUS_COLOR=$([[ "${{ job.status }}" == "success" ]] && echo "3066993" || echo "15158332")
+
+          # Extract branch name from ref
+          BRANCH_NAME=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+
+          # Construct issue link (modify according to your needs)
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            ISSUE_LINK="${{ github.event.pull_request.html_url }}"
+            TITLE="::::: Pull Request Notification :::::"
+            DESCRIPTION="**Event Time**: ${{ github.event.pull_request.updated_at }}\n \
+                          **Event Type**: ${{ github.event_name }}\n \
+                          **Repository**: ${{ github.repository }}\n \
+                          **PR Title**: ${{ github.event.pull_request.title }}\n \
+                          **PR Author**: ${{ github.event.pull_request.user.login }}\n \
+                          **PR Body**: ${{ github.event.pull_request.body }}\n \
+                          **PR Merged**: ${{ github.event.pull_request.merged }}\n \
+                          **Job Status**: ${{ job.status }}"
+          else
+            ISSUE_LINK="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+            TITLE="::::: Push Notification :::::"
+            DESCRIPTION="**Event Time**: ${{ github.event.head_commit.timestamp }}\n \
+                          **Event Type**: ${{ github.event_name }}\n \
+                          **Repository**: ${{ github.repository }}\n \
+                          **Branch**: $BRANCH_NAME\n \
+                          **Commit Message**: ${{ github.event.head_commit.message }}\n \
+                          **Job Status**: ${{ job.status }}"
+          fi
+          
           curl -H "Content-Type: application/json" \
           -X POST \
-          -d "{\"content\": \" ::::: Event Notification ::::: \n \
-                            \n [Event Time]: ${{ github.event.head_commit.timestamp }} \
-                            \n [Event Type]: ${{ github.event_name }} \
-                            \n [Repository]: ${{ github.repository }} \
-                            \n [Branch]: ${{ github.ref }} \
-                            \n [Commit Message]: ${{ github.event.head_commit.message }} \
-                            \n [Job Status] : ${{ job.status }} \
-          \"}" \
+          -d "{\"embeds\": [{
+              \"title\": \"$TITLE\",
+              \"description\": \"$DESCRIPTION\",
+              \"color\": $STATUS_COLOR,
+              \"url\": \"$ISSUE_LINK\",
+              \"footer\": { \
+                \"text\": \"Click the link above to view the details.\" \
+              } \
+          }]}" \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+
