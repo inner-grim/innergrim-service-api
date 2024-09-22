@@ -57,12 +57,12 @@ jobs:
           -X POST \
           -d "{\"embeds\": [{
               \"title\": \"::::: Event Notification :::::\", \
-              \"description\": \"[Event Time]: ${{ github.event.head_commit.timestamp }}\n \
-                                 [Event Type]: ${{ github.event_name }}\n \
-                                 [Repository]: ${{ github.repository }}\n \
-                                 [Branch]: $BRANCH_NAME\n \
-                                 [Commit Message]: ${{ github.event.head_commit.message }}\n \
-                                 [Job Status]: ${{ job.status }}\", \
+              \"description\": \"**Event Time**: ${{ github.event.head_commit.timestamp }}\n \
+                                 **Event Type**: ${{ github.event_name }}\n \
+                                 **Repository**: ${{ github.repository }}\n \
+                                 **Branch**: $BRANCH_NAME\n \
+                                 **Commit Message**: ${{ github.event.head_commit.message }}\n \
+                                 **Job Status**: ${{ job.status }}\", \
               \"color\": $STATUS_COLOR, \
               \"url\": \"$ISSUE_LINK\", \
               \"footer\": { \
