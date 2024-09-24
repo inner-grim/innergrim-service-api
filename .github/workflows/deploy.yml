@@ -53,10 +53,10 @@ jobs:
           REPOSITORY_URI=147997147328.dkr.ecr.ap-northeast-2.amazonaws.com/innergrim/service-api
           
           # Build Docker image with a local name
-          docker build -t $LOCAL_IMAGE_NAME:$IMAGE_TAG .
+          docker build -t $IMAGE_NAME:$IMAGE_TAG .
       
           # Tag the image with the ECR repository URI
-          docker tag $LOCAL_IMAGE_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
+          docker tag $IMAGE_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
       
           # Push the image to ECR
           docker push $REPOSITORY_URI:$IMAGE_TAG
