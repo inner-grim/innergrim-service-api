@@ -33,11 +33,18 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
         with:
-          region: ap-northeast-2
+          region: ${{ secrets.AWS_REGION }}
 
       - name: Build, tag, and push image to ECR
         run: |
