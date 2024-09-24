@@ -57,12 +57,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
         with:
           region: ${{ secrets.AWS_REGION }}
-
-      - name: Delete old `latest` image
-        run: |
-          REPOSITORY_NAME=innergrim/service-api
-          aws ecr list-images --repository-name $REPOSITORY_NAME --query 'imageIds[*]' --output text | grep -E 'imageTag=latest' | xargs -I {} aws ecr batch-delete-image --repository-name $REPOSITORY_NAME --image-ids imageTag=latest --region ${{ secrets.AWS_REGION }}
-
+          
       - name: Build, tag, and push image to ECR
         run: |
           IMAGE_NAME=innergrim-service-api
