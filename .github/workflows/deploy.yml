@@ -59,32 +59,31 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          # Define paths for logs
           SCP_LOG="scp.log"
           SSH_LOG="ssh.log"
-
-          # Run scp and capture its output
+      
+          # Save the SSH key to a temporary file
+          echo "${{ secrets.EC2_SSH_KEY }}" > /tmp/id_rsa
+          chmod 600 /tmp/id_rsa
+      
           echo "Transferring file to EC2..."
-          scp -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} innergrim-service-api.tar ec2-user@3.39.72.21:/home/ec2-user > $SCP_LOG 2>&1
+          scp -o StrictHostKeyChecking=no -i /tmp/id_rsa innergrim-service-api.tar ec2-user@3.39.72.21:/home/ec2-user > $SCP_LOG 2>&1
           if [ $? -ne 0 ]; then
-            echo "SCP failed. Check $SCP_LOG for details."
-            cat $SCP_LOG
-            exit 1
+          echo "SCP failed. Check $SCP_LOG for details."
+          cat $SCP_LOG
+          exit 1
           fi
-
-          # Run ssh and capture its output
+      
           echo "Running commands on EC2..."
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ec2-user@3.39.72.21 << 'EOF' > $SSH_LOG 2>&1
-            docker load < /home/ec2-user/innergrim-service-api.tar
-            docker stop innergrim-service-api || true
-            docker rm innergrim-service-api || true
-            docker run -d --name innergrim-service-api -p 80:8080 innergrim-service-api:latest
+          ssh -o StrictHostKeyChecking=no -i /tmp/id_rsa ec2-user@3.39.72.21 << 'EOF' > $SSH_LOG 2>&1
+          docker load < /home/ec2-user/innergrim-service-api.tar
+          docker stop innergrim-service-api || true
+          docker rm innergrim-service-api || true
+          docker run -d --name innergrim-service-api -p 80:8080 innergrim-service-api:latest
           EOF
-
+      
           if [ $? -ne 0 ]; then
-            echo "SSH commands failed. Check $SSH_LOG for details."
-            cat $SSH_LOG
-            exit 1
+          echo "SSH commands failed. Check $SSH_LOG for details."
+          cat $SSH_LOG
+          exit 1
           fi
-        env:
-          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
