@@ -49,13 +49,13 @@ jobs:
         run: docker build -t innergrim-service-api:latest -f .docker/Dockerfile .
 
       - name: Save Docker image to a tar file
-        run: docker save innergrim-service-api:latest | gzip > innergrim-service-api.tar.gz
+        run: docker save innergrim-service-api:latest > innergrim-service-api.tar
 
       - name: Upload Docker image tar as an artifact
         uses: actions/upload-artifact@v3
         with:
           name: docker-image
-          path: innergrim-service-api.tar.gz
+          path: innergrim-service-api.tar
 
       - name: Deploy to EC2
         run: |
@@ -63,10 +63,9 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" > /tmp/id_rsa
           chmod 600 /tmp/id_rsa
           
-          scp -o StrictHostKeyChecking=no -i /tmp/id_rsa innergrim-service-api.tar.gz ec2-user@3.39.72.21:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i /tmp/id_rsa innergrim-service-api.tar ec2-user@3.39.72.21:/home/ec2-user
           ssh -o StrictHostKeyChecking=no -i /tmp/id_rsa ec2-user@3.39.72.21 << 'EOF' 
           
-          gzip -d /home/ec2-user/innergrim-service-api.tar.gz
           docker load < /home/ec2-user/innergrim-service-api.tar
           docker stop innergrim-service-api || true
           docker rm innergrim-service-api || true
