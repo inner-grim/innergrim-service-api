@@ -55,35 +55,19 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: docker-image
-          path: innergrim-service-api.tar
+          path: innergrim-service-api.tar.gz
 
       - name: Deploy to EC2
         run: |
-          SCP_LOG="scp.log"
-          SSH_LOG="ssh.log"
-      
           # Save the SSH key to a temporary file
           echo "${{ secrets.EC2_SSH_KEY }}" > /tmp/id_rsa
           chmod 600 /tmp/id_rsa
-      
-          echo "Transferring file to EC2..."
-          scp -o StrictHostKeyChecking=no -i /tmp/id_rsa innergrim-service-api.tar ec2-user@3.39.72.21:/home/ec2-user > $SCP_LOG 2>&1
-          if [ $? -ne 0 ]; then
-          echo "SCP failed. Check $SCP_LOG for details."
-          cat $SCP_LOG
-          exit 1
-          fi
-      
-          echo "Running commands on EC2..."
-          ssh -o StrictHostKeyChecking=no -i /tmp/id_rsa ec2-user@3.39.72.21 << 'EOF' > $SSH_LOG 2>&1
-          docker load < /home/ec2-user/innergrim-service-api.tar
-          docker stop innergrim-service-api || true
-          docker rm innergrim-service-api || true
-          docker run -d --name innergrim-service-api -p 80:8080 innergrim-service-api:latest
+          
+          scp -o StrictHostKeyChecking=no -i /tmp/id_rsa innergrim-service-api.tar.gz ec2-user@3.39.72.21:/home/ec2-user
+          ssh -o StrictHostKeyChecking=no -i /tmp/id_rsa ec2-user@3.39.72.21 << 'EOF'
+            gzip -d /home/ec2-user/innergrim-service-api.tar.gz
+            docker load < /home/ec2-user/innergrim-service-api.tar
+            docker stop innergrim-service-api || true
+            docker rm innergrim-service-api || true
+            docker run -d --name innergrim-service-api -p 80:8080 innergrim-service-api:latest
           EOF
-      
-          if [ $? -ne 0 ]; then
-          echo "SSH commands failed. Check $SSH_LOG for details."
-          cat $SSH_LOG
-          exit 1
-          fi
