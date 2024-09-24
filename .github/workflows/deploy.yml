@@ -60,9 +60,8 @@ jobs:
 
       - name: Build, tag, and push image to ECR
         run: |
-          
           IMAGE_NAME=innergrim-service-api
-          IMAGE_TAG=v0.0.1
+          IMAGE_TAG=latest
           REPOSITORY_URI=147997147328.dkr.ecr.ap-northeast-2.amazonaws.com/innergrim/service-api
           
           # Build Docker image with a local name
@@ -73,4 +72,17 @@ jobs:
           
           # Push the image to ECR
           docker push $REPOSITORY_URI:$IMAGE_TAG
+
+      - name: Delete old `-` tagged images
+        run: |
+          # Fetch list of all image tags
+          IMAGE_TAGS=$(aws ecr list-images --repository-name innergrim/service-api --region ${{ secrets.AWS_REGION }} --query 'imageIds[*]' --output text)
+          
+          # Loop through each image tag and delete if it starts with '-'
+          for IMAGE_TAG in $IMAGE_TAGS; do
+            if [[ "$IMAGE_TAG" == "-"* ]]; then
+              echo "Deleting image with tag $IMAGE_TAG"
+              aws ecr batch-delete-image --repository-name innergrim/service-api --region ${{ secrets.AWS_REGION }} --image-ids imageTag=$IMAGE_TAG
+            fi
+          done
           
