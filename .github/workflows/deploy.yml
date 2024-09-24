@@ -59,15 +59,11 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          scp -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} innergrim-service-api.tar.gz ec2-user@3.39.72.21:/home/ec2-user
+          scp -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} innergrim-service-api.tar ec2-user@3.39.72.21:/home/ec2-user
           ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ec2-user@3.39.72.21 << 'EOF'
-            set -e
-            echo "Loading Docker image..."
-            docker load < /home/ec2-user/innergrim-service-api.tar.gz
-            echo "Stopping existing container..."
+            docker load < /home/ec2-user/innergrim-service-api.tar
             docker stop innergrim-service-api || true
             docker rm innergrim-service-api || true
-            echo "Running new container..."
             docker run -d --name innergrim-service-api -p 80:8080 innergrim-service-api:latest
           EOF
         env:
