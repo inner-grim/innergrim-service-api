@@ -61,7 +61,7 @@ jobs:
       - name: Build, tag, and push image to ECR
         run: |
           IMAGE_NAME=innergrim-service-api
-          IMAGE_TAG=latest
+          IMAGE_TAG=v0.0.1
           REPOSITORY_URI=147997147328.dkr.ecr.ap-northeast-2.amazonaws.com/innergrim/service-api
           
           # Build Docker image with a local name
