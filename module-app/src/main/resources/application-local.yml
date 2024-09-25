@@ -13,7 +13,14 @@ spring:
 #    url: jdbc:h2:mem:testdb;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
     username: sa
     password:
-
+    hikari:
+      minimum-idle: 5                      # 최소 유지할 커넥션 수
+      maximum-pool-size: 10                # 최대 커넥션 수
+      idle-timeout: 600000                 # 커넥션이 사용되지 않을 경우 대기 시간 (밀리초)
+      max-lifetime: 1800000                # 커넥션의 최대 수명 (밀리초)
+      connection-timeout: 30000            # 커넥션 풀에서 커넥션을 얻기까지의 최대 대기 시간 (밀리초)
+      pool-name: HikariCP                  # 커넥션 풀의 이름
+      connection-test-query: SELECT 1      # 커넥션을 확인할 때 사용할 쿼리 (MySQL 기준)
   sql:
     # DB초기화(schema.sql, data.sql) , [always : 기동 시 매번 동작, never : 기동 시 동작하지 않음]
     init:
@@ -28,6 +35,21 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+    format-sql: true
   redis:
     host: localhost
     port: 6379
+
+logging:
+  level:
+    root: INFO                   # 전체 애플리케이션의 기본 로그 레벨
+    com.team.innergrim: DEBUG    # 특정 패키지의 로그 레벨
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # 콘솔 로그 출력 형식
+  file:
+    name: logs/application.log   # 로그 파일 위치
+  logback:
+    rollingpolicy:
+      file-name-pattern: logs/application-%d{yyyy-MM-dd}.%i.log.gz  # 로그 파일을 일별로 압축하여 보관
+      max-history: 30            # 최대 30일치의 로그 파일 유지
+      max-file-size: 10MB        # 하나의 로그 파일의 최대 크기
