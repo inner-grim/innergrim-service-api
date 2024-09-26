@@ -36,7 +36,7 @@ spring:
     show-sql: true
     format-sql: true
   redis:
-    host: localhost
+    host: develop.jmpeec.ng.0001.apn2.cache.amazonaws.com
     port: 6379
 
 logging:
