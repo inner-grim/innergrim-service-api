@@ -69,5 +69,5 @@ jobs:
           docker load < /home/ec2-user/innergrim-service-api.tar
           docker stop innergrim-service-api || true
           docker rm innergrim-service-api || true
-          docker run -d --name innergrim-service-api -p 8080:8080 innergrim-service-api:latest
+          docker run -d --name innergrim-service-api -p 8080:8080 -e "SPRING_PROFILES_ACTIVE=dev" innergrim-service-api:latest
           EOF
