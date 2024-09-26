@@ -41,6 +41,9 @@ subprojects {
 		// H2 Database
 		runtimeOnly("com.h2database:h2")
 
+		// Mysql
+		runtimeOnly("mysql:mysql-connector-java:8.0.33")
+
 		// SpringDoc (Swagger)
 		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 

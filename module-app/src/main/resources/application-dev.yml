@@ -5,13 +5,13 @@ database: mysql
 spring:
   h2:
     console:
-      enabled: true
+      enabled: false
       path: /h2-console
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://develop.c5aa8aa4iy5s.ap-northeast-2.rds.amazonaws.com:3306
+    url: jdbc:mysql://develop.c5aa8aa4iy5s.ap-northeast-2.rds.amazonaws.com:3306/innergrim
     username: innergrim-user
     password: user12#$
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       minimum-idle: 5                      # 최소 유지할 커넥션 수
       maximum-pool-size: 10                # 최대 커넥션 수
