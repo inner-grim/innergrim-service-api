@@ -14,12 +14,6 @@ import java.time.LocalDateTime
 @Table(name = "membership")
 class Membership() : BaseEntity() {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Comment("ID")
-    @Column(name = "id", nullable = false)
-    var id: Long? = null
-
     @Comment("이름")
     @Column(name = "name", nullable = false, length = 255)
     lateinit var name: String
