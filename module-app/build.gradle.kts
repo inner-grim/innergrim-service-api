@@ -9,6 +9,7 @@ plugins {
 
 dependencies {
 	implementation(project(":module-core"))
+	implementation(project(":module-domain-health-check"))
 	implementation(project(":module-domain-member"))
 }
 
