@@ -38,6 +38,11 @@ spring:
   redis:
     host: develop.jmpeec.ng.0001.apn2.cache.amazonaws.com
     port: 6379
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 logging:
   level:
@@ -52,3 +57,11 @@ logging:
       file-name-pattern: logs/application-%d{yyyy-MM-dd}.%i.log.gz  # 로그 파일을 일별로 압축하여 보관
       max-history: 30            # 최대 30일치의 로그 파일 유지
       max-file-size: 10MB        # 하나의 로그 파일의 최대 크기
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2  # 원하는 AWS 리전
+    credentials:
+    s3:
+      bucket: dev-innergrim  # S3 버킷 이름

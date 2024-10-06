@@ -53,6 +53,9 @@ subprojects {
 		// Embeded Redis (Local용)
 		implementation("it.ozimov:embedded-redis:0.7.2")
 
+		// AWS SDK
+		implementation("io.awspring.cloud:spring-cloud-aws-s3:3.0.2")
+
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 		testRuntimeOnly("org.junit.platform:junit-platform-launcher")

@@ -9,7 +9,10 @@ import jakarta.servlet.http.HttpServletRequestWrapper
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpServletResponseWrapper
 import org.slf4j.LoggerFactory
+import org.springframework.http.MediaType
 import org.springframework.web.filter.OncePerRequestFilter
+import org.springframework.web.multipart.MultipartHttpServletRequest
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -28,39 +31,41 @@ class RequestResponseLoggingFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        // 래퍼로 요청/응답을 감싸서 바디를 캐싱할 수 있게 함
-        val wrappedRequest = CachedBodyHttpServletRequest(request)
-        val wrappedResponse = CachedBodyHttpServletResponse(response)
+        if (!request.contentType.contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+            // 래퍼로 요청/응답을 감싸서 바디를 캐싱할 수 있게 함
+            val wrappedRequest = CachedBodyHttpServletRequest(request)
+            val wrappedResponse = CachedBodyHttpServletResponse(response)
 
-        // 요청 바디 읽기
-        val requestBody = wrappedRequest.reader.lines().reduce { acc, s -> acc + s }.orElse("")
+            // 요청 바디 읽기
+            val requestBody = wrappedRequest.reader.lines().reduce { acc, s -> acc + s }.orElse("")
 
-        logger.info(
-            """
+            logger.info(
+                """
             ::::: [Request] :::::
             [uri] = ${wrappedRequest.requestURI}
             [method] = ${wrappedRequest.method}
             [body] = $requestBody
             """
-        )
+            )
 
-        // 필터 체인 계속 실행
-        filterChain.doFilter(wrappedRequest, wrappedResponse)
+            // 필터 체인 계속 실행
+            filterChain.doFilter(wrappedRequest, wrappedResponse)
 
-        // 응답 바디 읽기
-        val responseBody = wrappedResponse.getCapturedBody()
+            // 응답 바디 읽기
+            val responseBody = wrappedResponse.getCapturedBody()
 
-        logger.info(
-            """
+            logger.info(
+                """
             ::::: [Response] :::::
             [status] = ${wrappedResponse.status}
             [body] = $responseBody
             """
-        )
+            )
 
-        // 응답 데이터를 다시 클라이언트로 보내기 위해 출력 스트림에 기록
-        response.outputStream.write(responseBody.toByteArray())
-        response.outputStream.flush()
+            // 응답 데이터를 다시 클라이언트로 보내기 위해 출력 스트림에 기록
+            response.outputStream.write(responseBody.toByteArray())
+            response.outputStream.flush()
+        }
     }
 }
 
@@ -69,6 +74,7 @@ class CachedBodyHttpServletRequest(request: HttpServletRequest) : HttpServletReq
     private val cachedBody: ByteArray
 
     init {
+        // Body를 캐시합니다.
         cachedBody = request.inputStream.readBytes()
     }
 
