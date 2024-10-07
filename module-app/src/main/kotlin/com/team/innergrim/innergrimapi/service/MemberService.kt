@@ -3,6 +3,7 @@ package com.team.innergrim.innergrimapi.service
 import com.team.innergrim.innergrimapi.dto.SearchMemberDto
 import com.team.innergrim.innergrimapi.entity.Member
 import com.team.innergrim.innergrimapi.search.Search
+import com.team.innergrim.innergrimapi.web.dto.MemberRequestDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.redis.core.RedisTemplate
@@ -14,6 +15,8 @@ class MemberService (
     private val memberDomainService: MemberDomainService,
     @Autowired val redisTemplate: RedisTemplate<String, String>
 ) {
+
+    // ::::: [GET] :::::
 
     fun getMembers(): List<Member> {
         return memberDomainService.getMembers()
@@ -28,6 +31,12 @@ class MemberService (
                 id = id,
             ).specification
         ).get()
+    }
+
+    // ::::: [POST] :::::
+
+    fun createMember(createMemberRequestDto: MemberRequestDto.Create) {
+
     }
 
 }
