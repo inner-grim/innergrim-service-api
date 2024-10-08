@@ -31,7 +31,8 @@ class RequestResponseLoggingFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        if (!request.contentType.contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+        if (request.contentType == null
+            || !request.contentType.contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
             // 래퍼로 요청/응답을 감싸서 바디를 캐싱할 수 있게 함
             val wrappedRequest = CachedBodyHttpServletRequest(request)
             val wrappedResponse = CachedBodyHttpServletResponse(response)
@@ -65,6 +66,9 @@ class RequestResponseLoggingFilter : OncePerRequestFilter() {
             // 응답 데이터를 다시 클라이언트로 보내기 위해 출력 스트림에 기록
             response.outputStream.write(responseBody.toByteArray())
             response.outputStream.flush()
+        } else {
+            filterChain.doFilter(request, response)
+            return
         }
     }
 }
