@@ -4,30 +4,47 @@ import com.team.innergrim.innergrimapi.entity.Member
 import com.team.innergrim.innergrimapi.entity.Membership
 import com.team.innergrim.innergrimapi.enums.SocialType
 import com.team.innergrim.innergrimapi.enums.Gender
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 
 class MemberRequestDto {
 
     data class Create(
+        @field:Schema(description = "소셜 type", required = true)
         @NotNull
         val socialType: SocialType,
+
+        @field:Schema(description = "소셜 ID", required = true)
         @NotBlank
         val socialId: String,
+
+        @field:Schema(description = "아름", required = true)
         @NotBlank
         val name: String,
+
+        @field:Schema(description = "이메일", required = true)
         @NotBlank
         val email: String,
+
+        @field:Schema(description = "생년 월일", required = true)
         @NotBlank
         val birthDate: String,
+
+        @field:Schema(description = "성별", required = true)
         @NotNull
         val gender: Gender,
+
+        @field:Schema(description = "전화번호", required = true)
         @NotBlank
         val phoneNumber: String,
+
+        @field:Schema(description = "CI", required = true)
         @NotBlank
         val ci: String,
 
-        val profileImage: String
+        @field:Schema(description = "프로필 이미지", required = false)
+        val profileImage: String?
     ) {
         fun toMemberEntity(membership: Membership):Member {
             return Member().apply {

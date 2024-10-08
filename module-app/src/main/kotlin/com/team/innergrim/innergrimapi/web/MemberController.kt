@@ -4,6 +4,7 @@ import com.team.innergrim.innergrimapi.entity.Member
 import com.team.innergrim.innergrimapi.response.BaseResponse
 import com.team.innergrim.innergrimapi.service.MemberService
 import com.team.innergrim.innergrimapi.web.dto.MemberRequestDto
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
@@ -33,6 +34,10 @@ class MemberController(
     }
 
     // ::::: [POST] :::::
+    @Operation(
+        summary = "회원 생성",
+        description = "회원 생성"
+    )
     @PostMapping
     fun createMember(@RequestBody @Valid createMemberRequestDto : MemberRequestDto.Create): BaseResponse<Unit> {
         memberService.createMember(createMemberRequestDto)
