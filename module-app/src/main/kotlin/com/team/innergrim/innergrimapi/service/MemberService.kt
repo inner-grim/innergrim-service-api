@@ -2,6 +2,8 @@ package com.team.innergrim.innergrimapi.service
 
 import com.team.innergrim.innergrimapi.dto.SearchMemberDto
 import com.team.innergrim.innergrimapi.entity.Member
+import com.team.innergrim.innergrimapi.enums.ErrorCode
+import com.team.innergrim.innergrimapi.exception.BusinessException
 import com.team.innergrim.innergrimapi.search.Search
 import com.team.innergrim.innergrimapi.web.dto.MemberRequestDto
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,6 +15,7 @@ import java.time.LocalDateTime
 @Service
 class MemberService (
     private val memberDomainService: MemberDomainService,
+    private val membershipDomainService: MembershipDomainService,
     @Autowired val redisTemplate: RedisTemplate<String, String>
 ) {
 
@@ -33,10 +36,13 @@ class MemberService (
         ).get()
     }
 
-    // ::::: [POST] :::::
+    // ::::: [CREATE] :::::
 
     fun createMember(createMemberRequestDto: MemberRequestDto.Create) {
-
+        val membership = membershipDomainService.getMemberDetail(1L)
+            .orElseThrow{
+                BusinessException(ErrorCode.NOT_FOUND, "")
+            }
+        memberDomainService.createMember(createMemberRequestDto.toMemberEntity(membership))
     }
-
 }

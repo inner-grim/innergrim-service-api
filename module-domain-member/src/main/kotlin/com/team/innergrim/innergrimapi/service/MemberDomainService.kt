@@ -9,6 +9,7 @@ import java.util.Optional
 @Service
 class MemberDomainService (private val memberRepository: MemberRepository) {
 
+    // ::::: [GET] :::::
     fun getMembers (): List<Member> {
         return memberRepository.findAll();
     }
@@ -19,6 +20,11 @@ class MemberDomainService (private val memberRepository: MemberRepository) {
 
     fun getMemberDetail(specification: Specification<Member>): Optional<Member> {
         return memberRepository.findOne(specification);
+    }
+
+    // ::::: [CREATE] :::::
+    fun createMember(member: Member) {
+        memberRepository.save(member);
     }
 
 }
