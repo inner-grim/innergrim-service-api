@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS member (
     id bigint auto_increment primary key comment 'ID',
     membership_id bigint not null comment '멤버십',
     social_type varchar(20) not null comment '소셜 type',
-    social_id varchar(255) not null comment '소셜 ID',
+    social_id varchar(255) not null unique comment '소셜 ID',
     name varchar(255) not null comment '이름',
     email varchar(255) not null comment '이메일',
     birth_date varchar(8) not null comment '생년월일',
