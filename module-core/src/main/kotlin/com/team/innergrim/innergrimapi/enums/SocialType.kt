@@ -1,6 +1,6 @@
 package com.team.innergrim.innergrimapi.enums
 
-enum class AuthProvider(
+enum class SocialType(
 ) {
     kakao,
     apple,
