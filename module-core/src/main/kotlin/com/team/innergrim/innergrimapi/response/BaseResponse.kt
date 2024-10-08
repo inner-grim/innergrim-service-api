@@ -2,7 +2,7 @@ package com.team.innergrim.innergrimapi.response
 
 data class BaseResponse<T>(
     val statusCode: String,
-    val description: String,
+    val message: String,
     val data: T? = null
 ) {
     companion object {
