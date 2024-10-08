@@ -3,12 +3,7 @@ package com.team.innergrim.innergrimapi.entity
 import com.team.innergrim.innergrimapi.base.BaseEntity
 import com.team.innergrim.innergrimapi.enums.Gender
 import com.team.innergrim.innergrimapi.enums.SocialType
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import org.hibernate.annotations.Comment
 import java.time.LocalDateTime
 
@@ -20,6 +15,7 @@ class Member() : BaseEntity() {
     @JoinColumn(name = "membership_id", nullable = false)
     lateinit var membership: Membership
 
+    @Enumerated(EnumType.STRING)
     @Comment("소셜 type")
     @Column(name = "social_type", nullable = false, length = 20)
     lateinit var socialType: SocialType
@@ -39,6 +35,7 @@ class Member() : BaseEntity() {
     @Column(name = "birth_date", nullable = false, length = 8)
     lateinit var birthDate: String
 
+    @Enumerated(EnumType.STRING)
     @Comment("성별")
     @Column(name = "gender", nullable = false, length = 20)
     lateinit var gender: Gender
