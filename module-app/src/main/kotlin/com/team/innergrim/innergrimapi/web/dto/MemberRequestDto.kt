@@ -12,35 +12,35 @@ class MemberRequestDto {
 
     data class Create(
         @field:Schema(description = "소셜 type", required = true)
-        @NotNull
+        @field:NotNull
         val socialType: SocialType,
 
         @field:Schema(description = "소셜 ID", required = true)
-        @NotBlank
+        @field:NotBlank
         val socialId: String,
 
         @field:Schema(description = "아름", required = true)
-        @NotBlank
+        @field:NotBlank
         val name: String,
 
         @field:Schema(description = "이메일", required = true)
-        @NotBlank
+        @field:NotBlank
         val email: String,
 
         @field:Schema(description = "생년 월일", required = true)
-        @NotBlank
+        @field:NotBlank
         val birthDate: String,
 
         @field:Schema(description = "성별", required = true)
-        @NotNull
+        @field:NotNull
         val gender: Gender,
 
         @field:Schema(description = "전화번호", required = true)
-        @NotBlank
+        @field:NotBlank
         val phoneNumber: String,
 
         @field:Schema(description = "CI", required = true)
-        @NotBlank
+        @field:NotBlank
         val ci: String,
 
         @field:Schema(description = "프로필 이미지", required = false)

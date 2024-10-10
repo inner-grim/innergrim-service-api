@@ -35,6 +35,9 @@ subprojects {
 		implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 		implementation("org.jetbrains.kotlin:kotlin-reflect")
 
+		// Spring Boot Starter Validation
+		implementation("org.springframework.boot:spring-boot-starter-validation")
+
 		// JPA
 		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 

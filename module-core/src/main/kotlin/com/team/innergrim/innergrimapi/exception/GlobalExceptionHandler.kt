@@ -5,7 +5,6 @@ import com.team.innergrim.innergrimapi.response.ErrorResponse
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import kotlin.math.log
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -19,6 +18,11 @@ class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException::class)
     fun handleBusinessException(ex: BusinessException): ErrorResponse<Unit> {
         return ErrorResponse(ex.statusCode, ex.message)
+    }
+
+    @ExceptionHandler(Exception::class)
+    fun handleException(ex: Exception): ErrorResponse<Unit> {
+        return ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR, ex.message)
     }
 
 }
