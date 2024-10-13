@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface MemberRepository : JpaRepository<Member, Long>, JpaSpecificationExecutor<Member> {
+    fun findBySocialId(socialId: String): Member?
 }

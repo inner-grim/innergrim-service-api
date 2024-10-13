@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 
 data class SearchMemberDto(
     val id: Long? = null,
+    val socialId: String? = null,
     val name: String? = null,
     val membershipId: Long? = null,
 ) {

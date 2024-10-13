@@ -38,6 +38,9 @@ subprojects {
 		// Spring Boot Starter Validation
 		implementation("org.springframework.boot:spring-boot-starter-validation")
 
+		// Spring security
+		implementation("org.springframework.boot:spring-boot-starter-security")
+
 		// JPA
 		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
@@ -58,6 +61,10 @@ subprojects {
 
 		// AWS SDK
 		implementation("io.awspring.cloud:spring-cloud-aws-s3:3.0.2")
+
+		// JWT
+		implementation("com.auth0:java-jwt:4.4.0")
+
 
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

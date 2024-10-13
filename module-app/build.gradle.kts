@@ -11,6 +11,7 @@ dependencies {
 	implementation(project(":module-core"))
 	implementation(project(":module-domain-health-check"))
 	implementation(project(":module-domain-member"))
+	implementation(project(":module-domain-auth"))
 }
 
 tasks.withType<KotlinCompile> {
