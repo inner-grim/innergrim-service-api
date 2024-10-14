@@ -3,6 +3,7 @@ package com.team.innergrim.innergrimapi.web
 import com.team.innergrim.innergrimapi.response.BaseResponse
 import com.team.innergrim.innergrimapi.service.AuthService
 import com.team.innergrim.innergrimapi.web.dto.AuthRequestDto
+import com.team.innergrim.innergrimapi.web.dto.AuthResponseDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
@@ -23,9 +24,8 @@ class AuthController(
     // ::::: [POST] :::::
     @Operation(summary = "회원 로그인", description = "회원 로그인")
     @PostMapping("/member/login")
-    fun memberLogin(@RequestBody @Valid memberLoginDto : AuthRequestDto.MemberLogin): BaseResponse<Unit> {
-        authService.memberLogin(memberLoginDto)
-        return BaseResponse.successWithoutData()
+    fun memberLogin(@RequestBody @Valid memberLoginDto : AuthRequestDto.MemberLogin): BaseResponse<AuthResponseDto.MemberLogin> {
+        return BaseResponse.successWithData(authService.memberLogin(memberLoginDto))
     }
 
 }
