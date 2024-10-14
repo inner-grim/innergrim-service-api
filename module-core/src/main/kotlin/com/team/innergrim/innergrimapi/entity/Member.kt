@@ -5,7 +5,6 @@ import com.team.innergrim.innergrimapi.enums.Gender
 import com.team.innergrim.innergrimapi.enums.SocialType
 import jakarta.persistence.*
 import org.hibernate.annotations.Comment
-import java.time.LocalDateTime
 
 @Entity
 @Table(name = "member")
@@ -25,6 +24,7 @@ class Member() : BaseEntity() {
     lateinit var socialId: String
 
     @Comment("이름")
+    @Column(name = "name", nullable = false, length = 255)
     lateinit var name: String
 
     @Comment("이메일")

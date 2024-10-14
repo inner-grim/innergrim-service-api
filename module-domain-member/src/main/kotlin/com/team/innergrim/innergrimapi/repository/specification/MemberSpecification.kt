@@ -18,6 +18,13 @@ object MemberSpecification {
             })
         }
 
+        // SocialId
+        if (!searchDto.socialId.isNullOrEmpty()) {
+            spec = spec.and(Specification { root, query, criteriaBuilder ->
+                criteriaBuilder.equal(root.get<String>("socialId"), searchDto.socialId)
+            })
+        }
+
         // 이름
         if (!searchDto.name.isNullOrEmpty()) {
             spec = spec.and(Specification { root, query, criteriaBuilder ->
