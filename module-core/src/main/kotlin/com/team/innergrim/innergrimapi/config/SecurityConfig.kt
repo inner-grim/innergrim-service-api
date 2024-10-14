@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
@@ -48,7 +49,7 @@ class SecurityConfig(
     @Bean
     fun daoAuthenticationProvider(): DaoAuthenticationProvider {
         val daoAuthenticationProvider = DaoAuthenticationProvider()
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder())
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder())
         daoAuthenticationProvider.setUserDetailsService(customUserDetailService)
         return daoAuthenticationProvider
     }
@@ -62,8 +63,18 @@ class SecurityConfig(
     }
 
     // 비밀번호 인코더 (선택사항: 비밀번호를 암호화할 때 사용)
-//    @Bean
-//    fun passwordEncoder(): PasswordEncoder {
-//        return BCryptPasswordEncoder()
-//    }
+    @Bean
+    fun passwordEncoder(): PasswordEncoder {
+        return NoPasswordEncoder()
+    }
+}
+
+class NoPasswordEncoder : PasswordEncoder {
+    override fun encode(rawPassword: CharSequence): String {
+        return rawPassword.toString() // 평문 그대로 반환
+    }
+
+    override fun matches(rawPassword: CharSequence, encodedPassword: String): Boolean {
+        return true // 항상 true 반환하여 비밀번호 검증을 우회
+    }
 }
