@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS picture_diary (
     image_url varchar(255) not null comment '이미지 URL',
     content text not null comment '일기 내용',
     like_yn char(1) null comment '선호 여부',
-    status varchar(20) not null 'active' comment '상태',
+    status varchar(20) not null default 'active' comment '상태',
     created_at datetime not null default current_timestamp comment '생성 시간',
     updated_at datetime null comment '수정 시간'
 ) CHARSET=utf8mb4;
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS picture_diary (
 CREATE TABLE IF NOT EXISTS membership (
     id bigint auto_increment primary key comment 'ID',
     name varchar(255) not null comment '이름',
-    status varchar(20) not null 'active' comment '상태',
+    status varchar(20) not null default 'active' comment '상태',
     created_at datetime not null default current_timestamp comment '생성 시간',
     updated_at datetime null comment '수정 시간'
 ) CHARSET=utf8mb4;
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS member (
     ci varchar(255) null comment 'ci',
     profile_image varchar(255) null comment '프로필 이미지',
     block_yn char not null default 'N' comment '정지 여부',
-    status varchar(20) not null 'active' comment '상태',
+    status varchar(20) not null default 'active' comment '상태',
     created_at datetime null default current_timestamp comment '생성 시간',
     updated_at datetime null comment '수정 시간'
 ) CHARSET=utf8mb4;

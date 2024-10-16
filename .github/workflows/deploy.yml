@@ -66,6 +66,7 @@ jobs:
           scp -o StrictHostKeyChecking=no -i /tmp/id_rsa innergrim-service-api.tar ec2-user@3.39.72.21:/home/ec2-user
           ssh -o StrictHostKeyChecking=no -i /tmp/id_rsa ec2-user@3.39.72.21 << 'EOF' 
           
+          docker rmi -f innergrim-service-api || true
           docker load < /home/ec2-user/innergrim-service-api.tar
           docker stop innergrim-service-api || true
           docker rm innergrim-service-api || true
