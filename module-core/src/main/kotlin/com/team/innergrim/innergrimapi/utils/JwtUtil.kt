@@ -1,7 +1,6 @@
 package com.team.innergrim.innergrimapi.utils
 
 import com.auth0.jwt.JWT
-import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.interfaces.DecodedJWT
@@ -15,13 +14,19 @@ object JwtUtil {
     private val refreshTokenValidity: Long = 1000L * 60 * 60 * 24 * 30 // 한달 유효
 
     fun validateToken (token: String): Boolean {
-        return try {
-            val verifier: JWTVerifier = JWT.require(tokenKey).build()
-            val decodedJWT: DecodedJWT = verifier.verify(token)
-            decodedJWT.expiresAt.after(Date()) // 토큰의 만료 시간을 확인
-        } catch (ex: JWTVerificationException) {
-            false // 토큰 검증에 실패하면 false 반환
+        try {
+            val decodedJWT:DecodedJWT = getDecodeToken(token)
+            // 토큰의 만료 시간을 확인
+            return decodedJWT.expiresAt.after(Date())
+        } catch (e:JWTVerificationException) {
+            return false
         }
+    }
+
+    // 토큰에서 사용자 이름 추출
+    fun getUsername(token: String): String {
+        val decodedJWT:DecodedJWT = getDecodeToken(token)
+        return decodedJWT.subject
     }
 
     fun getRefreshTokenExpiry(): Long {
@@ -47,4 +52,7 @@ object JwtUtil {
             .sign(tokenKey) // 서명
     }
 
+    private fun getDecodeToken(token: String): DecodedJWT {
+        return JWT.require(tokenKey).build().verify(token)
+    }
 }

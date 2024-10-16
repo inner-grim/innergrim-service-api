@@ -1,5 +1,6 @@
 package com.team.innergrim.innergrimapi.config
 
+import com.team.innergrim.innergrimapi.filter.JwtAuthenticationFilter
 import com.team.innergrim.innergrimapi.service.CustomUserDetailService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,10 +12,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
     private val customUserDetailService: CustomUserDetailService
 ) {
     @Bean
@@ -32,16 +35,15 @@ class SecurityConfig(
                         "/v3/api-docs/**",
                         "/css/**",
                         "/js/**"
-                    )
-                    .permitAll()
-                    .requestMatchers("/auth/member/login")
-                    .permitAll() // 로그인 엔드포인트는 누구나 접근 가능
-                    .requestMatchers(/*HttpMethod.POST,*/"/member") // 회원가입은 토큰 불필요
-                    .permitAll()
+                    ).permitAll()
+                    .requestMatchers("/health").permitAll()
+                    .requestMatchers("/auth/member/login").permitAll() // 로그인 엔드포인트는 누구나 접근 가능
+                    .requestMatchers(/*HttpMethod.POST,*/"/member").permitAll() // 회원가입은 토큰 불필요
                     .anyRequest().authenticated() // 나머지 요청은 인증 필요
             }
             .authenticationProvider(daoAuthenticationProvider())
             .userDetailsService(customUserDetailService)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 

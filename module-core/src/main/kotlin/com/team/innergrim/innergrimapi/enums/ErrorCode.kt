@@ -6,4 +6,5 @@ enum class ErrorCode(
     BAD_REQUEST(""),
     NOT_FOUND(""),
     INTERNAL_SERVER_ERROR(""),
+    NOT_VALID(""),
 }
