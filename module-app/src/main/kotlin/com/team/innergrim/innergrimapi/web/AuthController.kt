@@ -22,6 +22,13 @@ class AuthController(
     // ::::: [GET] :::::
 
     // ::::: [POST] :::::
+    @Operation(summary = "AccessToken 검증", description = "AccessToken 검증")
+    @PostMapping("/validate/access-token")
+    fun validateAccessToken(@RequestBody @Valid validateAccessToken: AuthRequestDto.ValidateAccessToken): BaseResponse<Unit> {
+        authService.validateAccessToken(validateAccessToken)
+        return BaseResponse.successWithoutData()
+    }
+
     @Operation(summary = "회원 로그인", description = "회원 로그인")
     @PostMapping("/member/login")
     fun memberLogin(@RequestBody @Valid memberLoginDto : AuthRequestDto.MemberLogin): BaseResponse<AuthResponseDto.MemberLogin> {

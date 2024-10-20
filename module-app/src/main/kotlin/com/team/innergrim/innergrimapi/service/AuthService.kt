@@ -8,9 +8,7 @@ import com.team.innergrim.innergrimapi.web.dto.AuthRequestDto
 import com.team.innergrim.innergrimapi.web.dto.AuthResponseDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
@@ -18,7 +16,6 @@ import java.util.concurrent.TimeUnit
 @Service
 class AuthService (
     private val memberDomainService: MemberDomainService,
-    private val authenticationManager: AuthenticationManager,
     private val passwordEncoder: PasswordEncoder,
     @Autowired val redisTemplate: RedisTemplate<String, String>
 ) {
@@ -40,7 +37,6 @@ class AuthService (
         val authenticationToken = UsernamePasswordAuthenticationToken(
             member.socialId, passwordEncoder.encode("")
         )
-        val authentication: Authentication = authenticationManager.authenticate(authenticationToken)
 
         // 3. token 생성
         val accessToken = JwtUtil.createAccessToken(member.socialId)
@@ -58,5 +54,11 @@ class AuthService (
             accessToken = accessToken,
             refreshToken = refreshToken
         )
+    }
+
+    fun validateAccessToken(validateAccessToken: AuthRequestDto.ValidateAccessToken) {
+        //토큰 검증
+        if (!JwtUtil.validateToken(validateAccessToken.accessToken))
+            throw BusinessException(ErrorCode.NOT_VALID, "AccessToken Is Not Valid")
     }
 }

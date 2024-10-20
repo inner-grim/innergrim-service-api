@@ -10,7 +10,5 @@ class AuthResponseDto {
 
         @field:Schema(description = "refreshToken")
         val refreshToken: String,
-    ) {
-
-    }
+    ) {}
 }

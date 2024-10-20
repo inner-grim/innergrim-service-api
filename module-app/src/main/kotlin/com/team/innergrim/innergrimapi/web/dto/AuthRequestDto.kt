@@ -16,7 +16,13 @@ class AuthRequestDto {
         @field:Schema(description = "소셜 ID", required = true)
         @field:NotBlank
         val socialId: String,
-    ) {
+    ) {}
 
-    }
+    data class ValidateAccessToken(
+
+        @field:Schema(description = "AccessToken", required = true)
+        @field:NotBlank
+        val accessToken: String,
+
+    ) {}
 }
