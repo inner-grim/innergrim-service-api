@@ -12,6 +12,7 @@ dependencies {
 	implementation(project(":module-domain-health-check"))
 	implementation(project(":module-domain-member"))
 	implementation(project(":module-domain-auth"))
+	implementation(project(":module-domain-picture-diary"))
 }
 
 tasks.withType<KotlinCompile> {

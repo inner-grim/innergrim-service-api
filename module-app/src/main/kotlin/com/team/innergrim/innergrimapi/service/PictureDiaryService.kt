@@ -6,7 +6,12 @@ import org.springframework.stereotype.Service
 class PictureDiaryService (
     private val healthCheckDomainService : HealthCheckDomainService,
 ) {
-    fun getHealthCheck(): String {
+
+    // ::::: [GET] :::::
+
+    // ::::: [CREATE] :::::
+    fun createPictureDiary(): String {
         return healthCheckDomainService.getHealthCheck();
     }
+
 }
