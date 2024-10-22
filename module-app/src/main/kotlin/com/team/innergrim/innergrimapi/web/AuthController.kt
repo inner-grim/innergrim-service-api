@@ -24,8 +24,15 @@ class AuthController(
     // ::::: [POST] :::::
     @Operation(summary = "AccessToken 검증", description = "AccessToken 검증")
     @PostMapping("/validate/access-token")
-    fun validateAccessToken(@RequestBody @Valid validateAccessToken: AuthRequestDto.ValidateAccessToken): BaseResponse<Unit> {
-        authService.validateAccessToken(validateAccessToken)
+    fun validateAccessToken(@RequestBody @Valid validateAccessTokenDto: AuthRequestDto.ValidateAccessToken): BaseResponse<Unit> {
+        authService.validateAccessToken(validateAccessTokenDto)
+        return BaseResponse.successWithoutData()
+    }
+
+    @Operation(summary = "AccessToken 발급", description = "AccessToken 발급")
+    @PostMapping("/issue/access-token")
+    fun issueAccessToken(@RequestBody @Valid issueAccessTokenDto: AuthRequestDto.IssueAccessToken): BaseResponse<Unit> {
+        authService.issueAccessToken(issueAccessTokenDto)
         return BaseResponse.successWithoutData()
     }
 

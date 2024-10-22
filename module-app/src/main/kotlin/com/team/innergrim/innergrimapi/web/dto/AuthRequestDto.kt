@@ -25,4 +25,11 @@ class AuthRequestDto {
         val accessToken: String,
 
     ) {}
+
+    data class IssueAccessToken(
+
+        @field:Schema(description = "RefreshToken", required = true)
+        @field:NotBlank
+        val refreshToken: String,
+    ) {}
 }

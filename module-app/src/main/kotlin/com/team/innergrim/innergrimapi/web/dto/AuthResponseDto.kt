@@ -11,4 +11,12 @@ class AuthResponseDto {
         @field:Schema(description = "refreshToken")
         val refreshToken: String,
     ) {}
+
+    data class IssueAccessToken(
+        @field:Schema(description = "accessToken")
+        val accessToken: String,
+
+        @field:Schema(description = "refreshToken")
+        val refreshToken: String,
+    )
 }

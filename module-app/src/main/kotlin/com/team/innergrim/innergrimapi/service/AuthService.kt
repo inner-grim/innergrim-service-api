@@ -56,9 +56,32 @@ class AuthService (
         )
     }
 
-    fun validateAccessToken(validateAccessToken: AuthRequestDto.ValidateAccessToken) {
+    fun validateAccessToken(validateAccessTokenDto: AuthRequestDto.ValidateAccessToken) {
         //토큰 검증
-        if (!JwtUtil.validateToken(validateAccessToken.accessToken))
+        if (!JwtUtil.validateToken(validateAccessTokenDto.accessToken))
             throw BusinessException(ErrorCode.NOT_VALID, "AccessToken Is Not Valid")
+    }
+
+    fun issueAccessToken(issueAccessTokenDto: AuthRequestDto.IssueAccessToken): AuthResponseDto.IssueAccessToken {
+        // 토큰 검증
+        if (!JwtUtil.validateToken(issueAccessTokenDto.refreshToken))
+            throw BusinessException(ErrorCode.NOT_VALID, "RefreshToken Is Not Valid")
+
+        val socialId = JwtUtil.getUsername(issueAccessTokenDto.refreshToken)
+
+        // 2. Redis에서 refreshToken 조회
+        val savedRefreshToken = redisTemplate.opsForValue().get("refreshToken_${socialId}")
+        if (savedRefreshToken.isNullOrEmpty() || savedRefreshToken != issueAccessTokenDto.refreshToken) {
+            throw BusinessException(ErrorCode.NOT_FOUND, "RefreshToken Is Not Found or Mismatch")
+        }
+
+        // 3. 새로운 accessToken 생성
+        val newAccessToken = JwtUtil.createAccessToken(socialId)
+
+        // 4. 반환
+        return AuthResponseDto.IssueAccessToken(
+            accessToken = newAccessToken,
+            refreshToken = issueAccessTokenDto.refreshToken // 기존 refreshToken 그대로 반환
+        )
     }
 }
