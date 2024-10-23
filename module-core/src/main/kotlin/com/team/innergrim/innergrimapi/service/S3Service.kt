@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Service
@@ -20,6 +22,7 @@ class S3Service(
         val extension = originalFileName.substringAfterLast('.', "")
 
         val fileName = UUID.randomUUID().toString()
+        val uploadDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE)
         val baseImageUrl = "https://dev-innergrim.s3.ap-northeast-2.amazonaws.com"
 
         try {
@@ -27,7 +30,7 @@ class S3Service(
                 .bucket("dev-innergrim")
                 .contentType(multipartFile.getContentType())
                 .contentLength(multipartFile.getSize())
-                .key(fileName)
+                .key("${uploadType.name}/${uploadDate}/${fileName}.${extension}")
                 .build()
             val requestBody = RequestBody.fromBytes(multipartFile.getBytes())
 
@@ -35,7 +38,7 @@ class S3Service(
         } catch (e: Exception) {
             throw BusinessException(ErrorCode.FILE_UPLOAD_FAIL, uploadType.name)
         }
-        return "${baseImageUrl}/${uploadType.name}/${fileName}.${extension}"
+        return "${baseImageUrl}/${uploadType.name}/${uploadDate}/${fileName}.${extension}"
     }
 
 }
