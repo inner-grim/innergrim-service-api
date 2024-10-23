@@ -12,14 +12,13 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class PictureDiaryController(
     private val pictureDiaryService: PictureDiaryService
-//    private val s3S3Service: S3Service
 ) {
 
     // ::::: [GET] :::::
 
     @GetMapping
     fun getPictureDiaryList() {
-
+        // TODO: getPictureDiaryList
     }
 
     // ::::: [POST] :::::
@@ -28,7 +27,6 @@ class PictureDiaryController(
         @ModelAttribute createPictureDiaryRequestDto: PictureDiaryRequestDto.Create
     ): BaseResponse<Unit> {
         pictureDiaryService.createPictureDiary(createPictureDiaryRequestDto)
-//        s3S3Service.uploadFile(file);
         return BaseResponse.successWithoutData()
     }
 

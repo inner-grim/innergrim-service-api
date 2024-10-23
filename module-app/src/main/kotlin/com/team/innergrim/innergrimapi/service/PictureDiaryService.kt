@@ -2,6 +2,7 @@ package com.team.innergrim.innergrimapi.service
 
 import com.team.innergrim.innergrimapi.enums.UploadType
 import com.team.innergrim.innergrimapi.web.dto.PictureDiaryRequestDto
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,6 +14,7 @@ class PictureDiaryService (
     // ::::: [GET] :::::
 
     // ::::: [CREATE] :::::
+    @Transactional
     fun createPictureDiary(createPictureDiaryRequestDto: PictureDiaryRequestDto.Create) {
 
         // S3 업로드
