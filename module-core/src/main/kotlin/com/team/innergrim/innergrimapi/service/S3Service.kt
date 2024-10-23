@@ -36,6 +36,7 @@ class S3Service(
 
             s3Client.putObject(putObjectRequest, requestBody)
         } catch (e: Exception) {
+            e.printStackTrace()
             throw BusinessException(ErrorCode.FILE_UPLOAD_FAIL, uploadType.name)
         }
         return "${baseImageUrl}/${uploadType.name}/${uploadDate}/${fileName}.${extension}"
