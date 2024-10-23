@@ -47,7 +47,7 @@ spring:
 
 logging:
   level:
-    root: DEBUG                  # 전체 애플리케이션의 기본 로그 레벨
+    root: INFO                  # 전체 애플리케이션의 기본 로그 레벨
     com.team.innergrim: DEBUG    # 특정 패키지의 로그 레벨
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # 콘솔 로그 출력 형식
