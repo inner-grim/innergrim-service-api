@@ -27,7 +27,7 @@ class PictureDiaryController(
     fun createPictureDiary(
         @ModelAttribute createPictureDiaryRequestDto: PictureDiaryRequestDto.Create
     ): BaseResponse<Unit> {
-        pictureDiaryService.createPictureDiary()
+        pictureDiaryService.createPictureDiary(createPictureDiaryRequestDto)
 //        s3S3Service.uploadFile(file);
         return BaseResponse.successWithoutData()
     }

@@ -9,6 +9,10 @@ import org.hibernate.annotations.Comment
 @Table(name = "picture_diary")
 class PictureDiary() : BaseEntity() {
 
+    @Comment("제목")
+    @Column(name = "title", nullable = false)
+    lateinit var title: String
+
     @Comment("감정 키워트")
     @Column(name = "emotion_keyword", nullable = false)
     lateinit var emotionKeyword: String

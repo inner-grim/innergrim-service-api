@@ -1,32 +1,41 @@
 package com.team.innergrim.innergrimapi.service
 
+import com.team.innergrim.innergrimapi.enums.ErrorCode
+import com.team.innergrim.innergrimapi.enums.UploadType
+import com.team.innergrim.innergrimapi.exception.BusinessException
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
+import java.util.*
 
 @Service
 class S3Service(
     private val s3Client: S3Client
 ) {
+    fun uploadFile(multipartFile: MultipartFile, uploadType: UploadType): String {
 
-    fun uploadFile(multipartFile: MultipartFile): String {
+        val originalFileName = multipartFile.originalFilename ?: ""
+        val extension = originalFileName.substringAfterLast('.', "")
+
+        val fileName = UUID.randomUUID().toString()
+        val baseImageUrl = "https://dev-innergrim.s3.ap-northeast-2.amazonaws.com"
+
         try {
             val putObjectRequest = PutObjectRequest.builder()
                 .bucket("dev-innergrim")
                 .contentType(multipartFile.getContentType())
                 .contentLength(multipartFile.getSize())
-                .key(multipartFile.originalFilename)
+                .key(fileName)
                 .build()
-
             val requestBody = RequestBody.fromBytes(multipartFile.getBytes())
 
             s3Client.putObject(putObjectRequest, requestBody)
         } catch (e: Exception) {
-            e.printStackTrace()
+            throw BusinessException(ErrorCode.FILE_UPLOAD_FAIL, uploadType.name)
         }
-        return "파일이 S3에 성공적으로 업로드되었습니다."
+        return "${baseImageUrl}/${uploadType.name}/${fileName}.${extension}"
     }
 
 }

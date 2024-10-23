@@ -1,5 +1,6 @@
 package com.team.innergrim.innergrimapi.web.dto
 
+import com.team.innergrim.innergrimapi.entity.PictureDiary
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -12,6 +13,10 @@ class PictureDiaryRequestDto {
         @field:NotBlank
         val title: String,
 
+        @field:Schema(description = "감정 키워트", required = true)
+        @field:NotBlank
+        val emotionKeyword: String,
+
         @field:Schema(description = "내용", required = true)
         @field:NotBlank
         val content: String,
@@ -19,6 +24,16 @@ class PictureDiaryRequestDto {
         @field:Schema(description = "그림일기", required = true)
         @field:NotNull
         val file: MultipartFile
-    ) {}
+    ) {
+
+        fun toPictureDiaryEntity(imageUrl: String): PictureDiary {
+            return PictureDiary().apply {
+                this.title = this@Create.title
+                this.emotionKeyword = this@Create.emotionKeyword
+                this.imageUrl = imageUrl
+                this.content = this@Create.content
+            }
+        }
+    }
 
 }

@@ -4,8 +4,8 @@ DROP TABLE IF EXISTS member;
 
 CREATE TABLE IF NOT EXISTS picture_diary (
     id bigint auto_increment primary key comment 'ID',
-    create_date date not null comment '생성 일자',
-    emotion_keyword text not null comment '감정 키워트',
+    title varchar(255) not null comment '제목',
+    emotion_keyword varchar(255) not null comment '감정 키워트',
     image_url varchar(255) not null comment '이미지 URL',
     content text not null comment '일기 내용',
     like_yn char(1) null comment '선호 여부',
