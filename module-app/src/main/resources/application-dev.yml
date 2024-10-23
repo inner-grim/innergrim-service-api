@@ -46,7 +46,7 @@ spring:
 
 logging:
   level:
-    root: INFO                   # 전체 애플리케이션의 기본 로그 레벨
+    root: DEBUG                  # 전체 애플리케이션의 기본 로그 레벨
     com.team.innergrim: DEBUG    # 특정 패키지의 로그 레벨
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # 콘솔 로그 출력 형식
@@ -57,11 +57,3 @@ logging:
       file-name-pattern: logs/application-%d{yyyy-MM-dd}.%i.log.gz  # 로그 파일을 일별로 압축하여 보관
       max-history: 30            # 최대 30일치의 로그 파일 유지
       max-file-size: 10MB        # 하나의 로그 파일의 최대 크기
-
-cloud:
-  aws:
-    region:
-      static: ap-northeast-2  # 원하는 AWS 리전
-    credentials:
-    s3:
-      bucket: dev-innergrim  # S3 버킷 이름
