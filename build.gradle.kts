@@ -44,6 +44,9 @@ subprojects {
 		// JPA
 		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+		// Webflux
+		implementation("org.springframework.boot:spring-boot-starter-webflux")
+
 		// H2 Database
 		runtimeOnly("com.h2database:h2")
 
