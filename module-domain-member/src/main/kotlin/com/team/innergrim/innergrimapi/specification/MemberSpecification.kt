@@ -1,4 +1,4 @@
-package com.team.innergrim.innergrimapi.repository.specification
+package com.team.innergrim.innergrimapi.specification
 
 import com.team.innergrim.innergrimapi.dto.SearchMemberDto
 import com.team.innergrim.innergrimapi.entity.Member

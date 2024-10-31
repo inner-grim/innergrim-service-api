@@ -17,7 +17,6 @@ class MemberService (
 ) {
 
     // ::::: [GET] :::::
-
     fun getMembers(): List<Member> {
         return memberDomainService.getMembers()
     }

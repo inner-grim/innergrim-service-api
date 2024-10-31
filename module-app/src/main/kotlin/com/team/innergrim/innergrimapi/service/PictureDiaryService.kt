@@ -1,5 +1,6 @@
 package com.team.innergrim.innergrimapi.service
 
+import com.team.innergrim.innergrimapi.entity.PictureDiary
 import com.team.innergrim.innergrimapi.enums.ErrorCode
 import com.team.innergrim.innergrimapi.enums.UploadType
 import com.team.innergrim.innergrimapi.exception.BusinessException
@@ -14,6 +15,16 @@ class PictureDiaryService (
 ) {
 
     // ::::: [GET] :::::
+    fun getPictureDiaries()/*: List<PictureDiary>*/ {
+//        return pictureDiaryDomainService.getPictureDiaries()
+//        return List
+    }
+
+    fun getPictureDiaryDetail(id: Long) : PictureDiary {
+        return pictureDiaryDomainService.getPictureDiaryDetail(id).orElseThrow {
+            BusinessException(ErrorCode.NOT_FOUND, "picture diary")
+        }
+    }
 
     // ::::: [CREATE] :::::
     @Transactional
@@ -30,7 +41,6 @@ class PictureDiaryService (
         } catch (e:Exception) {
             throw BusinessException(ErrorCode.CREATE_FAIL, "pictureDiary")
         }
-
     }
 
 }

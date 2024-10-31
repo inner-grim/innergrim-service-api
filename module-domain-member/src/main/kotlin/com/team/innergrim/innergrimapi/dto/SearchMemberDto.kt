@@ -1,9 +1,8 @@
 package com.team.innergrim.innergrimapi.dto
 
 import com.team.innergrim.innergrimapi.entity.Member
-import com.team.innergrim.innergrimapi.repository.specification.MemberSpecification
+import com.team.innergrim.innergrimapi.specification.MemberSpecification
 import org.springframework.data.jpa.domain.Specification
-import java.time.LocalDateTime
 
 data class SearchMemberDto(
     val id: Long? = null,
