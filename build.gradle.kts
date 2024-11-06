@@ -62,8 +62,11 @@ subprojects {
 		// Embeded Redis (Local용)
 		implementation("it.ozimov:embedded-redis:0.7.2")
 
-		// AWS SDK
+		// AWS
+//		compileOnly("software.amazon.awssdk:aws-sdk-java:2.0.2")
 		implementation("io.awspring.cloud:spring-cloud-aws-s3:3.0.2")
+		implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.2.1"))
+		implementation("io.awspring.cloud:spring-cloud-aws-starter-parameter-store")
 
 		// JWT
 		implementation("com.auth0:java-jwt:4.4.0")

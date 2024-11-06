@@ -1,8 +1,9 @@
-
 # DB 종류
 database: h2db
 
 spring:
+  config:
+    import: aws-parameterstore:/parameter/api/local/
   h2:
     console:
       enabled: true
@@ -11,7 +12,7 @@ spring:
     driverClassName: org.h2.Driver
     url: jdbc:h2:file:./target/h2db/db/application;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
 #    url: jdbc:h2:mem:testdb;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
-    username: sa
+    username: ${datasource.username}
     password:
     hikari:
       minimum-idle: 5                      # 최소 유지할 커넥션 수
