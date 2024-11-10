@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull
 
 class MemberRequestDto {
 
-    data class Create(
+    data class MemberCreate(
         @field:Schema(description = "소셜 type", required = true)
         @field:NotNull
         val socialType: SocialType,
@@ -43,16 +43,16 @@ class MemberRequestDto {
     ) {
         fun toMemberEntity(membership: Membership):Member {
             return Member().apply {
-                this.socialType = this@Create.socialType
+                this.socialType = this@MemberCreate.socialType
                 this.membership = membership
-                this.socialId = this@Create.socialId
-                this.name = this@Create.name
-                this.email = this@Create.email
-                this.birthDate = this@Create.birthDate
-                this.gender = this@Create.gender
-                this.phoneNumber = this@Create.phoneNumber
-                this.ci = this@Create.ci
-                this.profileImage = this@Create.profileImage
+                this.socialId = this@MemberCreate.socialId
+                this.name = this@MemberCreate.name
+                this.email = this@MemberCreate.email
+                this.birthDate = this@MemberCreate.birthDate
+                this.gender = this@MemberCreate.gender
+                this.phoneNumber = this@MemberCreate.phoneNumber
+                this.ci = this@MemberCreate.ci
+                this.profileImage = this@MemberCreate.profileImage
                 this.blockYn = YnCode.N
             }
         }

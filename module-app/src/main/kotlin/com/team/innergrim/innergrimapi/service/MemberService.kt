@@ -34,7 +34,7 @@ class MemberService (
 
     // ::::: [CREATE] :::::
 
-    fun createMember(createMemberRequestDto: MemberRequestDto.Create) {
+    fun createMember(createMemberRequestDto: MemberRequestDto.MemberCreate) {
         val membership = membershipDomainService.getMemberDetail(1L)
             .orElseThrow{
                 BusinessException(ErrorCode.NOT_FOUND, "membership")
