@@ -10,7 +10,7 @@ class WebClientConfig {
     @Bean
     fun webClient(): WebClient {
         return WebClient.builder()
-            .baseUrl("http://innergram-chatbot:8000") // 기본 URL 설정
+            .baseUrl("http://innergrim-chatbot:8000") // 기본 URL 설정
             .defaultHeader("Content-Type", "application/json")
             .build()
     }
