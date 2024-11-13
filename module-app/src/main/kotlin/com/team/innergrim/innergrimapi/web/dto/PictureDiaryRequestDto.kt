@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile
 
 class PictureDiaryRequestDto {
 
-    data class PictureDiaryCreate(
+    data class CreatePictureDiary(
         @field:Schema(description = "제목", required = true)
         @field:NotBlank
         val title: String,
@@ -28,10 +28,10 @@ class PictureDiaryRequestDto {
 
         fun toPictureDiaryEntity(imageUrl: String): PictureDiary {
             return PictureDiary().apply {
-                this.title = this@PictureDiaryCreate.title
-                this.emotionKeyword = this@PictureDiaryCreate.emotionKeyword
+                this.title = this@CreatePictureDiary.title
+                this.emotionKeyword = this@CreatePictureDiary.emotionKeyword
                 this.imageUrl = imageUrl
-                this.content = this@PictureDiaryCreate.content
+                this.content = this@CreatePictureDiary.content
             }
         }
     }

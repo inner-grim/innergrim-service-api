@@ -10,7 +10,7 @@ class WebClientConfig {
     @Bean
     fun webClient(): WebClient {
         return WebClient.builder()
-            .baseUrl("https://catfact.ninja") // 기본 URL 설정
+            .baseUrl("http://localhost:8000") // 기본 URL 설정
             .defaultHeader("Content-Type", "application/json")
             .build()
     }

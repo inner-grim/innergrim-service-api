@@ -34,7 +34,7 @@ class PictureDiaryController(
     @Operation(summary = "그림일기 생성", description = "그림일기 생성")
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun createPictureDiary(
-        @ModelAttribute createPictureDiaryRequestDto: PictureDiaryRequestDto.PictureDiaryCreate
+        @ModelAttribute createPictureDiaryRequestDto: PictureDiaryRequestDto.CreatePictureDiary
     ): BaseResponse<Unit> {
         pictureDiaryService.createPictureDiary(createPictureDiaryRequestDto)
         return BaseResponse.successWithoutData()

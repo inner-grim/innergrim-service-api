@@ -63,8 +63,8 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" > /tmp/id_rsa
           chmod 600 /tmp/id_rsa
           
-          scp -o StrictHostKeyChecking=no -i /tmp/id_rsa innergrim-service-api.tar ec2-user@3.39.72.21:/home/ec2-user
-          ssh -o StrictHostKeyChecking=no -i /tmp/id_rsa ec2-user@3.39.72.21 << 'EOF' 
+          scp -o StrictHostKeyChecking=no -i /tmp/id_rsa innergrim-service-api.tar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user
+          ssh -o StrictHostKeyChecking=no -i /tmp/id_rsa ec2-user@${{ secrets.EC2_HOST }} << 'EOF' 
           
           docker rmi -f innergrim-service-api || true
           docker load < /home/ec2-user/innergrim-service-api.tar

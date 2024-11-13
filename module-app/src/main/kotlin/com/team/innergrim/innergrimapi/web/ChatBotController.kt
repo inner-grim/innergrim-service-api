@@ -1,9 +1,12 @@
 package com.team.innergrim.innergrimapi.web
 
+import com.team.innergrim.innergrimapi.response.BaseResponse
 import com.team.innergrim.innergrimapi.service.ChatBotService
+import com.team.innergrim.innergrimapi.web.dto.ChatbotRequestDto
+import com.team.innergrim.innergrimapi.web.dto.ChatbotResponseDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -14,9 +17,9 @@ class ChatBotController(
     private val chatBotService: ChatBotService
 ) {
 
-    @GetMapping("/send/chat")
+    @PostMapping("/send/chat")
     @Operation(summary = "대화 전송", description = "대화 전송")
-    fun sendChat () : String? {
-        return chatBotService.sendChat()
+    fun sendChat (sendChat: ChatbotRequestDto.SendChat) : BaseResponse<ChatbotResponseDto.SendChat> {
+        return BaseResponse.successWithData(chatBotService.sendChat())
     }
 }

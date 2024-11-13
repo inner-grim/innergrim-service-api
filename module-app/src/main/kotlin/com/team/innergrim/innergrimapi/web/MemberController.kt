@@ -33,7 +33,7 @@ class MemberController(
     // ::::: [POST] :::::
     @Operation(summary = "회원 생성", description = "회원 생성")
     @PostMapping
-    fun createMember(@RequestBody @Valid createMemberRequestDto : MemberRequestDto.MemberCreate): BaseResponse<Unit> {
+    fun createMember(@RequestBody @Valid createMemberRequestDto : MemberRequestDto.CreateMember): BaseResponse<Unit> {
         memberService.createMember(createMemberRequestDto)
         return BaseResponse.successWithoutData()
     }

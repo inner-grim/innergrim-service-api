@@ -28,7 +28,7 @@ class PictureDiaryService (
 
     // ::::: [CREATE] :::::
     @Transactional
-    fun createPictureDiary(createPictureDiaryRequestDto: PictureDiaryRequestDto.PictureDiaryCreate) {
+    fun createPictureDiary(createPictureDiaryRequestDto: PictureDiaryRequestDto.CreatePictureDiary) {
 
         // S3 업로드
         val imageUrl = s3Service.uploadFile(createPictureDiaryRequestDto.file, UploadType.picture_diary_image)
