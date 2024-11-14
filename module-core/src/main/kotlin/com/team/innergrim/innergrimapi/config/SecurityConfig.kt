@@ -40,7 +40,8 @@ class SecurityConfig(
                     .requestMatchers("/health").permitAll()
                     .requestMatchers(
                         "/auth/member/login",
-                        "/auth/validate/access-token"
+                        "/auth/validate/access-token",
+                        "/auth/issue/access-token"
                     ).permitAll() // 로그인 엔드포인트는 누구나 접근 가능
                     .requestMatchers(HttpMethod.POST,"/member").permitAll() // 회원가입은 토큰 불필요
                     .anyRequest().authenticated() // 나머지 요청은 인증 필요
