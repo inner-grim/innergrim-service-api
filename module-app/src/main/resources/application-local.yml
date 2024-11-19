@@ -6,14 +6,16 @@ spring:
     import: aws-parameterstore:/parameter/api/local/
   h2:
     console:
-      enabled: true
+      enabled: false
       path: /h2-console
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:file:./target/h2db/db/application;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
+#    driverClassName: org.h2.Driver
+#    url: jdbc:h2:file:./target/h2db/db/application;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
 #    url: jdbc:h2:mem:testdb;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
-    username: ${datasource.username}
-    password:
+    url: jdbc:mysql://localhost:13306/innergrim
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       minimum-idle: 5                      # 최소 유지할 커넥션 수
       maximum-pool-size: 10                # 최대 커넥션 수
