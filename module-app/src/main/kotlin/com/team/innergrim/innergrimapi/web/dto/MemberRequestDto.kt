@@ -49,10 +49,8 @@ class MemberRequestDto {
                 this.name = this@CreateMember.name
                 this.email = this@CreateMember.email
                 this.birthDate = this@CreateMember.birthDate
-                this.gender = this@CreateMember.gender
                 this.phoneNumber = this@CreateMember.phoneNumber
                 this.ci = this@CreateMember.ci
-                this.profileImage = this@CreateMember.profileImage
                 this.blockYn = YnCode.N
             }
         }

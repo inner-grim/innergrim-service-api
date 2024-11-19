@@ -30,12 +30,21 @@ CREATE TABLE IF NOT EXISTS member (
     name varchar(255) null comment '이름',
     email varchar(255) null comment '이메일',
     birth_date varchar(8) null comment '생년월일',
-    gender varchar(20) null comment '성별',
     phone_number varchar(20) null comment '전화번호',
     ci varchar(255) null comment 'ci',
-    profile_image varchar(255) null comment '프로필 이미지',
     block_yn char not null default 'N' comment '정지 여부',
     status varchar(20) not null default 'active' comment '상태',
     created_at datetime null default current_timestamp comment '생성 시간',
     updated_at datetime null comment '수정 시간'
-) CHARSET=utf8mb4;
+) comment '멤버' CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS profile (
+    id bigint auto_increment primary key comment 'ID',
+    member_id bigint not null comment '멤버 ID',
+    nick_name varchar(255) not null comment '닉네임',
+    gender varchar(20) null comment '성별',
+    profile_image varchar(255) null comment '프로필 이미지',
+    status varchar(20) not null default 'active' comment '상태',
+    created_at datetime null default current_timestamp comment '생성 시간',
+    updated_at datetime null comment '수정 시간'
+) comment '프로필' CHARSET=utf8mb4;

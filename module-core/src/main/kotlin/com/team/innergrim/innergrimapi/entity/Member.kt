@@ -1,7 +1,6 @@
 package com.team.innergrim.innergrimapi.entity
 
 import com.team.innergrim.innergrimapi.base.BaseEntity
-import com.team.innergrim.innergrimapi.enums.Gender
 import com.team.innergrim.innergrimapi.enums.SocialType
 import com.team.innergrim.innergrimapi.enums.YnCode
 import jakarta.persistence.*
@@ -36,11 +35,6 @@ class Member() : BaseEntity() {
     @Column(name = "birth_date", nullable = true, length = 8)
     var birthDate: String? = null
 
-    @Enumerated(EnumType.STRING)
-    @Comment("성별")
-    @Column(name = "gender", nullable = true, length = 20)
-    var gender: Gender? = null
-
     @Comment("전화번호")
     @Column(name = "phone_number", nullable = true, length = 20)
     var phoneNumber: String? = null
@@ -48,10 +42,6 @@ class Member() : BaseEntity() {
     @Comment("ci")
     @Column(name = "ci", nullable = true, length = 255)
     var ci: String? = null
-
-    @Comment("프로필 이미지")
-    @Column(name = "profile_image", nullable = true, length = 255)
-    var profileImage: String? = null
 
     @Enumerated(EnumType.STRING)
     @Comment("정지 여부")
