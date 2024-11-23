@@ -2,7 +2,7 @@ package com.team.innergrim.innergrimapi.specification
 
 import com.team.innergrim.innergrimapi.dto.SearchMemberDto
 import com.team.innergrim.innergrimapi.entity.Member
-import com.team.innergrim.innergrimapi.entity.Membership
+import com.team.innergrim.innergrimapi.entity.Role
 import org.springframework.data.jpa.domain.Specification
 
 object MemberSpecification {
@@ -33,9 +33,9 @@ object MemberSpecification {
         }
 
         // 멤버십
-        if (searchDto.membershipId != null) {
+        if (searchDto.roleId != null) {
             spec = spec.and(Specification { root, query, criteriaBuilder ->
-                criteriaBuilder.equal(root.get<Membership>("membership").get<Long>("id"), searchDto.membershipId)
+                criteriaBuilder.equal(root.get<Role>("role").get<Long>("id"), searchDto.roleId)
             })
         }
 

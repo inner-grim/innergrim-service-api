@@ -38,4 +38,11 @@ class MemberController(
         return BaseResponse.successWithoutData()
     }
 
+    @Operation(summary = "온보딩 설정", description = "온보딩 성정")
+    @PostMapping("/on-boarding")
+    fun createOnBoarding(@RequestBody @Valid createMemberRequestDto: MemberRequestDto.CreateOnBoarding): BaseResponse<Unit> {
+        memberService.createOnBoarding(createMemberRequestDto)
+        return BaseResponse.successWithoutData()
+    }
+
 }

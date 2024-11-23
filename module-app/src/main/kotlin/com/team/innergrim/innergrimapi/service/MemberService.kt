@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class MemberService (
     private val memberDomainService: MemberDomainService,
-    private val membershipDomainService: MembershipDomainService,
+    private val roleDomainService: RoleDomainService,
     @Autowired val redisTemplate: RedisTemplate<String, String>
 ) {
 
@@ -22,23 +22,29 @@ class MemberService (
     }
 
     fun getMemberDetail(id: Long): Member {
-
         redisTemplate.opsForValue().set("MemberService_getMemberDetail_id:$id", "value")
 
         return memberDomainService.getMemberDetail(
             SearchMemberDto(
                 id = id,
             ).specification
-        ).get()
+        ).orElseThrow { BusinessException(ErrorCode.NOT_FOUND, "member") }
     }
 
     // ::::: [CREATE] :::::
 
     fun createMember(createMemberRequestDto: MemberRequestDto.CreateMember) {
-        val membership = membershipDomainService.getMemberDetail(1L)
-            .orElseThrow{
-                BusinessException(ErrorCode.NOT_FOUND, "membership")
-            }
-        memberDomainService.createMember(createMemberRequestDto.toMemberEntity(membership))
+        val role = roleDomainService.getMemberDetail(1L)
+            .orElseThrow{ BusinessException(ErrorCode.NOT_FOUND, "membership") }
+        memberDomainService.createMember(createMemberRequestDto.toMemberEntity(role))
+    }
+
+    // ::::: [UPDATE] :::::
+
+    fun createOnBoarding(createMemberRequestDto: MemberRequestDto.CreateOnBoarding) {
+        val member = memberDomainService.getMemberDetail(createMemberRequestDto.id)
+            .orElseThrow { BusinessException(ErrorCode.NOT_FOUND, "member") }
+        createMemberRequestDto.updateMemberEntity(member)
+        memberDomainService.updateMember(member)
     }
 }
