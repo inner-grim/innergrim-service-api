@@ -1,0 +1,79 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Build application with Gradle
+        run: ./gradlew clean build
+
+      - name: Build Docker image
+        run: docker build -t innergrim-service-api:latest -f .docker/Dockerfile .
+
+      - name: Save Docker image to a tar file
+        run: docker save innergrim-service-api:latest > innergrim-service-api.tar
+
+      - name: Upload Docker image tar as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-image
+          path: innergrim-service-api.tar
+
+      - name: Deploy to EC2
+        run: |
+          # Save the SSH key to a temporary file
+          echo "${{ secrets.PRD_AWS_EC2_SSH_KEY }}" > /tmp/id_rsa
+          chmod 600 /tmp/id_rsa
+          
+          scp -o StrictHostKeyChecking=no -i /tmp/id_rsa innergrim-service-api.tar ec2-user@${{ secrets.PRD_AWS_EC2_HOST }}:/home/ec2-user
+          ssh -o StrictHostKeyChecking=no -i /tmp/id_rsa ec2-user@${{ secrets.PRD_AWS_EC2_HOST }} << 'EOF' 
+          
+          docker rmi -f innergrim-service-api || true
+          docker load < /home/ec2-user/innergrim-service-api.tar
+          docker stop innergrim-service-api || true
+          docker rm innergrim-service-api || true
+          docker run -d --name innergrim-service-api --network service-network -p 8080:8080 \
+            -e "SPRING_PROFILES_ACTIVE=dev" \
+            -e "AWS_ACCESS_KEY_ID=${{ secrets.PRD_AWS_ACCESS_KEY }}" \
+            -e "AWS_SECRET_ACCESS_KEY=${{ secrets.PRD_AWS_ACCESS_SECRET }}" \
+            -e "AWS_REGION=${{ secrets.AWS_REGION }}" \
+            innergrim-service-api:latest
+          EOF
