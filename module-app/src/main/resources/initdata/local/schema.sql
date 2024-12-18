@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS picture_diary (
     status varchar(20) not null default 'active' comment '상태',
     created_at datetime not null default current_timestamp comment '생성 시간',
     updated_at datetime null comment '수정 시간'
-) CHARSET=utf8mb4;
+) comment '그림일기' CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS role (
     id bigint auto_increment primary key comment 'ID',
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS role (
     status varchar(20) not null default 'active' comment '상태',
     created_at datetime not null default current_timestamp comment '생성 시간',
     updated_at datetime null comment '수정 시간'
-) CHARSET=utf8mb4;
+) comment '역할' CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS member (
     id bigint auto_increment primary key comment 'ID',
