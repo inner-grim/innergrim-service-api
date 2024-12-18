@@ -3,6 +3,7 @@ package com.team.innergrim.innergrimapi.service
 import com.team.innergrim.innergrimapi.dto.SearchMemberDto
 import com.team.innergrim.innergrimapi.enums.ErrorCode
 import com.team.innergrim.innergrimapi.exception.BusinessException
+import com.team.innergrim.innergrimapi.utils.AES256EncryptUtil
 import com.team.innergrim.innergrimapi.utils.JwtUtil
 import com.team.innergrim.innergrimapi.web.dto.AuthRequestDto
 import com.team.innergrim.innergrimapi.web.dto.AuthResponseDto
@@ -52,6 +53,25 @@ class AuthService (
         return AuthResponseDto.MemberLogin(
             accessToken = accessToken,
             refreshToken = refreshToken
+        )
+    }
+
+    fun adminLogin(adminLoginDto: AuthRequestDto.AdminLogin): AuthResponseDto.AdminLogin {
+
+        AES256EncryptUtil.encrypt("")
+
+        // 1. 관리자 조회
+
+        // 2. 인증 처리
+
+        // 3. 토큰 생성
+
+        // 4. redis에 토큰 저장
+
+        // 5. 응답
+        return AuthResponseDto.AdminLogin(
+            accessToken = "",
+            refreshToken = ""
         )
     }
 

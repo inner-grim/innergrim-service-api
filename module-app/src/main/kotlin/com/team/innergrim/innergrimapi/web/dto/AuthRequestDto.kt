@@ -7,17 +7,6 @@ import jakarta.validation.constraints.NotNull
 
 class AuthRequestDto {
 
-    data class MemberLogin(
-
-        @field:Schema(description = "소셜 Type", required = true)
-        @field:NotNull
-        val socialType: SocialType,
-
-        @field:Schema(description = "소셜 ID", required = true)
-        @field:NotBlank
-        val socialId: String,
-    ) {}
-
     data class ValidateAccessToken(
 
         @field:Schema(description = "AccessToken", required = true)
@@ -31,5 +20,27 @@ class AuthRequestDto {
         @field:Schema(description = "RefreshToken", required = true)
         @field:NotBlank
         val refreshToken: String,
+    ) {}
+
+    data class MemberLogin(
+
+        @field:Schema(description = "소셜 Type", required = true)
+        @field:NotNull
+        val socialType: SocialType,
+
+        @field:Schema(description = "소셜 ID", required = true)
+        @field:NotBlank
+        val socialId: String,
+    ) {}
+
+    data class AdminLogin(
+
+        @field:Schema(description = "로그인 ID", required = true)
+        @field:NotBlank
+        val loginId: String,
+
+        @field:Schema(description = "로그인 Password", required = true)
+        @field:NotBlank
+        val password: String,
     ) {}
 }

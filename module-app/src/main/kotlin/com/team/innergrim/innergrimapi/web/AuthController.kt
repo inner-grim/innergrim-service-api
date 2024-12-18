@@ -42,4 +42,10 @@ class AuthController(
         return BaseResponse.successWithData(authService.memberLogin(memberLoginDto))
     }
 
+    @Operation(summary = "관리자 로그인", description = "관리자 로그인")
+    @PostMapping("/admin/login")
+    fun adminLogin(@RequestBody @Valid adminLoginDto : AuthRequestDto.AdminLogin): BaseResponse<AuthResponseDto.AdminLogin> {
+        return BaseResponse.successWithData(authService.adminLogin(adminLoginDto))
+    }
+
 }
