@@ -8,4 +8,4 @@ WORKDIR /app
 COPY ../module-api/build/libs/module-api-0.0.1-SNAPSHOT.jar /app/module-api-0.0.1-SNAPSHOT.jar
 
 # Specify the command to run your app
-ENTRYPOINT ["java", "-jar", "/app/module-api-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-Xms128m", "-Xmx256m", "-XX:+UseG1GC", "-jar", "/app/module-api-0.0.1-SNAPSHOT.jar"]
