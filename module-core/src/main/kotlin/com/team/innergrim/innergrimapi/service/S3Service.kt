@@ -3,6 +3,7 @@ package com.team.innergrim.innergrimapi.service
 import com.team.innergrim.innergrimapi.enums.ErrorCode
 import com.team.innergrim.innergrimapi.enums.UploadType
 import com.team.innergrim.innergrimapi.exception.BusinessException
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import software.amazon.awssdk.core.sync.RequestBody
@@ -14,8 +15,11 @@ import java.util.*
 
 @Service
 class S3Service(
-    private val s3Client: S3Client
+    private val s3Client: S3Client,
+    @Value("s3.image-url") private val imageUrl: String,
+    @Value("s3.bucket") private val bucket: String
 ) {
+
     fun uploadFile(multipartFile: MultipartFile, uploadType: UploadType): String {
 
         val originalFileName = multipartFile.originalFilename ?: ""
@@ -23,11 +27,10 @@ class S3Service(
 
         val fileName = UUID.randomUUID().toString()
         val uploadDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE)
-        val baseImageUrl = "https://dev-innergrim.s3.ap-northeast-2.amazonaws.com"
 
         try {
             val putObjectRequest = PutObjectRequest.builder()
-                .bucket("dev-innergrim")
+                .bucket(bucket)
                 .contentType(multipartFile.getContentType())
                 .contentLength(multipartFile.getSize())
                 .key("${uploadType.name}/${uploadDate}/${fileName}.${extension}")
@@ -39,7 +42,7 @@ class S3Service(
             e.printStackTrace()
             throw BusinessException(ErrorCode.FILE_UPLOAD_FAIL, uploadType.name)
         }
-        return "${baseImageUrl}/${uploadType.name}/${uploadDate}/${fileName}.${extension}"
+        return "${imageUrl}/${uploadType.name}/${uploadDate}/${fileName}.${extension}"
     }
 
 }

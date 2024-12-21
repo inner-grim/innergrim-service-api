@@ -1,12 +1,11 @@
 package com.team.innergrim.innergrimapi.entity
 
 import com.team.innergrim.innergrimapi.base.BaseEntity
-import jakarta.persistence.Column
-import jakarta.persistence.FetchType
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 import org.hibernate.annotations.Comment
 
+@Entity
+@Table(name = "admin")
 class Admin() : BaseEntity() {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,7 +21,7 @@ class Admin() : BaseEntity() {
     lateinit var password: String
 
     @Comment("이름")
-    @Column(name = "name", nullable = true, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     var name: String? = null
 
     @Comment("이메일")
@@ -34,7 +33,7 @@ class Admin() : BaseEntity() {
     var birthDate: String? = null
 
     @Comment("전화번호")
-    @Column(name = "phone_number", nullable = true, length = 20)
+    @Column(name = "phone_number", nullable = false, length = 20)
     var phoneNumber: String? = null
 
 }

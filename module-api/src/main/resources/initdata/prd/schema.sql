@@ -48,10 +48,10 @@ CREATE TABLE IF NOT EXISTS admin (
     role_id bigint not null comment '역할',
     login_id varchar(50) not null comment '로그인 시 아이디',
     password varchar(255) not null unique comment '로그인 시 비밀번호',
-    name varchar(50) not null comment '이름',
+    name varchar(50) null comment '이름',
     email varchar(255) null comment '이메일',
     birth_date varchar(8) null comment '생년월일',
-    phone_number varchar(20) not null comment '전화번호',
+    phone_number varchar(20) null comment '전화번호',
     status varchar(20) not null default 'active' comment '상태',
     created_at datetime null default current_timestamp comment '생성 시간',
     updated_at datetime null comment '수정 시간'

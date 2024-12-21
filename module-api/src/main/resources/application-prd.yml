@@ -1,16 +1,16 @@
 
 # DB 종류
-profile: dev
+profile: prd
 
 spring:
   config:
-    import: aws-parameterstore:/parameter/api/dev/
+    import: aws-parameterstore:/parameter/api/prd/
   h2:
     console:
       enabled: false
       path: /h2-console
   datasource:
-    url: jdbc:mysql://develop.c5aa8aa4iy5s.ap-northeast-2.rds.amazonaws.com:3306/innergrim
+    url: jdbc:mysql://prd-innergrim.crw4aaosevc0.ap-northeast-2.rds.amazonaws.com:3306/innergrim
     username: innergrim-user
     password: user12#$
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -38,7 +38,7 @@ spring:
     show-sql: true
     format-sql: true
   redis:
-    host: develop.jmpeec.ng.0001.apn2.cache.amazonaws.com
+    host: prd-innergrim.bd3mqh.ng.0001.apn2.cache.amazonaws.com
     port: 6379
   servlet:
     multipart:
@@ -61,5 +61,5 @@ logging:
       max-file-size: 10MB        # 하나의 로그 파일의 최대 크기
 
 aws:
-  image-url: https://dev-innergrim.s3.ap-northeast-2.amazonaws.com
-  bucket: dev-innergrim
+  image-url: https://prd-innergrim.s3.ap-northeast-2.amazonaws.com
+  bucket: prd-innergrim

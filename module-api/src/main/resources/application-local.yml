@@ -9,12 +9,12 @@ spring:
       enabled: false
       path: /h2-console
   datasource:
-#    driverClassName: org.h2.Driver
-#    url: jdbc:h2:file:./target/h2db/db/application;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
-#    url: jdbc:h2:mem:testdb;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
+    #    driverClassName: org.h2.Driver
+    #    url: jdbc:h2:file:./target/h2db/db/application;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
+    #    url: jdbc:h2:mem:testdb;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
     url: jdbc:mysql://localhost:13306/innergrim
-    username: root
-    password: 1234
+    username: ${datasource.username}
+    password: ${datasource.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       minimum-idle: 5                      # 최소 유지할 커넥션 수
@@ -61,3 +61,8 @@ logging:
       file-name-pattern: logs/application-%d{yyyy-MM-dd}.%i.log.gz  # 로그 파일을 일별로 압축하여 보관
       max-history: 30            # 최대 30일치의 로그 파일 유지
       max-file-size: 10MB        # 하나의 로그 파일의 최대 크기
+
+
+aws:
+  image-url: https://dev-innergrim.s3.ap-northeast-2.amazonaws.com
+  bucket: dev-innergrim
