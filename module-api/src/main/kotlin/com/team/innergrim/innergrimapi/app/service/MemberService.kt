@@ -7,15 +7,14 @@ import com.team.innergrim.innergrimapi.enums.ErrorCode
 import com.team.innergrim.innergrimapi.exception.BusinessException
 import com.team.innergrim.innergrimapi.service.MemberDomainService
 import com.team.innergrim.innergrimapi.service.RoleDomainService
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.redis.core.RedisTemplate
+import com.team.innergrim.innergrimapi.utils.RedisUtil
 import org.springframework.stereotype.Service
 
 @Service
 class MemberService (
     private val memberDomainService: MemberDomainService,
     private val roleDomainService: RoleDomainService,
-    @Autowired val redisTemplate: RedisTemplate<String, String>
+    private val redisUtil: RedisUtil
 ) {
 
     // ::::: [GET] :::::
@@ -24,8 +23,6 @@ class MemberService (
     }
 
     fun getMemberDetail(id: Long): Member {
-        redisTemplate.opsForValue().set("MemberService_getMemberDetail_id:$id", "value")
-
         return memberDomainService.getMemberDetail(
             SearchMemberDto(
                 id = id,

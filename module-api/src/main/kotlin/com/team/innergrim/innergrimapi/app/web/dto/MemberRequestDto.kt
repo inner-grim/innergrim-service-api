@@ -55,7 +55,7 @@ class MemberRequestDto {
 
     data class CreateOnBoarding(
 
-        @field:Schema(description = "닉네임", required = true)
+        @field:Schema(description = "ID", required = true)
         @NotNull
         val id: Long,
 
