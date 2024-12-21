@@ -70,7 +70,7 @@ jobs:
           docker load < /home/ec2-user/innergrim-service-api.tar
           docker stop innergrim-service-api || true
           docker rm innergrim-service-api || true
-          docker run --restart always -d --name innergrim-service-api --network service-network -p 8080:8080 -m 256m --memory-swap=256m \
+          docker run --restart always -d --name innergrim-service-api --network service-network -p 8080:8080 \
             -e "SPRING_PROFILES_ACTIVE=dev" \
             -e "AWS_ACCESS_KEY_ID=${{ secrets.DEV_AWS_ACCESS_KEY }}" \
             -e "AWS_SECRET_ACCESS_KEY=${{ secrets.DEV_AWS_ACCESS_SECRET }}" \

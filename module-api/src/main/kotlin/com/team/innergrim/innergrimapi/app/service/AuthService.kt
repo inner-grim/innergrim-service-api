@@ -8,18 +8,19 @@ import com.team.innergrim.innergrimapi.exception.BusinessException
 import com.team.innergrim.innergrimapi.service.MemberDomainService
 import com.team.innergrim.innergrimapi.utils.AES256EncryptUtil
 import com.team.innergrim.innergrimapi.utils.JwtUtil
+import com.team.innergrim.innergrimapi.utils.RedisUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.concurrent.TimeUnit
 
 @Service
 class AuthService (
     private val memberDomainService: MemberDomainService,
     private val passwordEncoder: PasswordEncoder,
-    @Autowired val redisTemplate: RedisTemplate<String, String>
+    @Autowired val redisTemplate: RedisTemplate<String, String>,
+    private val redisUtil: RedisUtil
 ) {
     
     // ::::: [GET] :::::
@@ -40,16 +41,37 @@ class AuthService (
         )
 
         // 3. token 생성
-        val accessToken = JwtUtil.createAccessToken(member.socialId)
-        val refreshToken = JwtUtil.createRefreshToken(member.socialId)
+        val accessToken = JwtUtil.createAccessToken(member.id.toString())
+        val refreshToken = JwtUtil.createRefreshToken(member.id.toString())
 
         // 4. redis에 토큰 저장
-        redisTemplate.opsForValue().set(
-            "refreshToken_${member.socialId}",
-            refreshToken,
-            JwtUtil.getRefreshTokenExpiry(), // Redis에 저장될 refresh token의 만료 시간
-            TimeUnit.MILLISECONDS
+        redisUtil.setRedisValue(
+            "member_accessToken"
+            , member.id.toString()
+            , accessToken
+            , JwtUtil.getAccessTokenExpiry()
         )
+
+//        redisTemplate.opsForValue().set(
+//            "member_accessToken_${member.id.toString()}",
+//            accessToken,
+//            JwtUtil.getAccessTokenExpiry(), // Redis에 저장될 Access token의 만료 시간
+//            TimeUnit.MILLISECONDS
+//        )
+
+        redisUtil.setRedisValue(
+            "member_refreshToken"
+            , member.id.toString()
+            , refreshToken
+            , JwtUtil.getAccessTokenExpiry()
+        )
+
+//        redisTemplate.opsForValue().set(
+//            "member_refreshToken_${member.id.toString()}",
+//            refreshToken,
+//            JwtUtil.getRefreshTokenExpiry(), // Redis에 저장될 refresh token의 만료 시간
+//            TimeUnit.MILLISECONDS
+//        )
 
         return AuthResponseDto.MemberLogin(
             accessToken = accessToken,
@@ -87,16 +109,29 @@ class AuthService (
         if (!JwtUtil.validateToken(issueAccessTokenDto.refreshToken))
             throw BusinessException(ErrorCode.NOT_VALID, "RefreshToken Is Not Valid")
 
-        val socialId = JwtUtil.getUsername(issueAccessTokenDto.refreshToken)
+        val memberId = JwtUtil.getUsername(issueAccessTokenDto.refreshToken)
 
         // 2. Redis에서 refreshToken 조회
-        val savedRefreshToken = redisTemplate.opsForValue().get("refreshToken_${socialId}")
+        val savedRefreshToken = redisTemplate.opsForValue().get("member_refreshToken_${memberId}")
         if (savedRefreshToken.isNullOrEmpty() || savedRefreshToken != issueAccessTokenDto.refreshToken) {
             throw BusinessException(ErrorCode.NOT_FOUND, "RefreshToken Is Not Found or Mismatch")
         }
 
         // 3. 새로운 accessToken 생성
-        val newAccessToken = JwtUtil.createAccessToken(socialId)
+        val newAccessToken = JwtUtil.createAccessToken(memberId)
+        redisUtil.setRedisValue(
+            "member_accessToken"
+            , memberId
+            , newAccessToken
+            ,JwtUtil.getAccessTokenExpiry()
+        )
+
+//        redisTemplate.opsForValue().set(
+//            "member_accessToken_${memberId}",
+//            newAccessToken,
+//            JwtUtil.getAccessTokenExpiry(), // Redis에 저장될 Access token의 만료 시간
+//            TimeUnit.MILLISECONDS
+//        )
 
         // 4. 반환
         return AuthResponseDto.IssueAccessToken(

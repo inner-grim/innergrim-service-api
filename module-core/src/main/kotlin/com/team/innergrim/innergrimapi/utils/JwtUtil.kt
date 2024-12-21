@@ -4,6 +4,8 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.interfaces.DecodedJWT
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.User
 import java.util.*
 
 object JwtUtil {
@@ -24,9 +26,17 @@ object JwtUtil {
     }
 
     // 토큰에서 사용자 이름 추출
+    fun getUsername(): String {
+        return (SecurityContextHolder.getContext().authentication.principal as User).username
+    }
+
     fun getUsername(token: String): String {
         val decodedJWT:DecodedJWT = getDecodeToken(token)
         return decodedJWT.subject
+    }
+
+    fun getAccessTokenExpiry(): Long {
+        return accessTokenValidity
     }
 
     fun getRefreshTokenExpiry(): Long {
@@ -40,6 +50,13 @@ object JwtUtil {
     fun createRefreshToken(id: String): String {
         return createToken(id, refreshTokenValidity)
     }
+
+//    fun getAccessToken() {
+//        val bearerToken = request.getHeader("Authorization")
+//        return if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+//            bearerToken.substring(7) // "Bearer " 이후의 토큰 부분 추출
+//        } else null
+//    }
 
     private fun createToken(id: String, validity: Long): String {
         val now = Date()
@@ -55,4 +72,5 @@ object JwtUtil {
     private fun getDecodeToken(token: String): DecodedJWT {
         return JWT.require(tokenKey).build().verify(token)
     }
+
 }
