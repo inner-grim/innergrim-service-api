@@ -71,7 +71,7 @@ jobs:
           docker stop innergrim-service-api || true
           docker rm innergrim-service-api || true
           docker run -d --name innergrim-service-api --network service-network -p 8080:8080 \
-            -e "SPRING_PROFILES_ACTIVE=dev" \
+            -e "SPRING_PROFILES_ACTIVE=prd" \
             -e "AWS_ACCESS_KEY_ID=${{ secrets.PRD_AWS_ACCESS_KEY }}" \
             -e "AWS_SECRET_ACCESS_KEY=${{ secrets.PRD_AWS_ACCESS_SECRET }}" \
             -e "AWS_REGION=${{ secrets.AWS_REGION }}" \
