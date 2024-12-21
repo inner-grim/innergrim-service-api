@@ -12,7 +12,7 @@ spring:
   datasource:
     url: jdbc:mysql://prd-innergrim.crw4aaosevc0.ap-northeast-2.rds.amazonaws.com:3306/innergrim
     username: innergrim-user
-    password: user12#$
+    password: innergrim12#$
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       minimum-idle: 5                      # 최소 유지할 커넥션 수
