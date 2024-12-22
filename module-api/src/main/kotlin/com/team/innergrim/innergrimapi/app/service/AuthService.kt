@@ -7,12 +7,13 @@ import com.team.innergrim.innergrimapi.enums.ErrorCode
 import com.team.innergrim.innergrimapi.enums.MemberType
 import com.team.innergrim.innergrimapi.exception.BusinessException
 import com.team.innergrim.innergrimapi.service.MemberDomainService
-import com.team.innergrim.innergrimapi.utils.AES256EncryptUtil
 import com.team.innergrim.innergrimapi.utils.JwtUtil
 import com.team.innergrim.innergrimapi.utils.RedisUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -21,7 +22,8 @@ class AuthService (
     private val memberDomainService: MemberDomainService,
     private val passwordEncoder: PasswordEncoder,
     @Autowired val redisTemplate: RedisTemplate<String, String>,
-    private val redisUtil: RedisUtil
+    private val redisUtil: RedisUtil,
+    private val authenticationManager: AuthenticationManager,
 ) {
     
     // ::::: [GET] :::::
@@ -35,12 +37,13 @@ class AuthService (
                     loginId = memberLoginDto.loginId,
                     memberType = MemberType.user
                 ).specification
-                ).orElseThrow{BusinessException(ErrorCode.NOT_FOUND, "member") }
+                ).orElseThrow{ BusinessException(ErrorCode.NOT_FOUND, "member") }
 
         // 2. 인증처리
-        val authenticationToken = UsernamePasswordAuthenticationToken(
-            member.loginId, passwordEncoder.encode("")
+        val authentication = authenticationManager.authenticate(
+            UsernamePasswordAuthenticationToken(member.id, "")
         )
+        SecurityContextHolder.getContext().authentication = authentication
 
         // 3. token 생성
         val accessToken = JwtUtil.createAccessToken(member.id.toString())
@@ -68,21 +71,42 @@ class AuthService (
     }
 
     fun adminLogin(adminLoginDto: AuthRequestDto.AdminLogin): AuthResponseDto.AdminLogin {
-
-        AES256EncryptUtil.encrypt("")
-
         // 1. 관리자 조회
+        val member = memberDomainService.getMemberDetail(
+            SearchMemberDto(
+                loginId = adminLoginDto.loginId,
+                memberType = MemberType.admin
+            ).specification
+        ).orElseThrow{ BusinessException(ErrorCode.NOT_FOUND, "admin") }
 
-        // 2. 인증 처리
+        val authentication = authenticationManager.authenticate(
+            UsernamePasswordAuthenticationToken(member.id, adminLoginDto.password)
+        )
+        SecurityContextHolder.getContext().authentication = authentication
 
         // 3. 토큰 생성
+        val accessToken = JwtUtil.createAccessToken(member.id.toString())
+        val refreshToken = JwtUtil.createRefreshToken(member.id.toString())
 
         // 4. redis에 토큰 저장
+        redisUtil.setRedisValue(
+            "admin_accessToken"
+            , member.id.toString()
+            , accessToken
+            , JwtUtil.getAccessTokenExpiry()
+        )
+
+        redisUtil.setRedisValue(
+            "admin_refreshToken"
+            , member.id.toString()
+            , refreshToken
+            , JwtUtil.getAccessTokenExpiry()
+        )
 
         // 5. 응답
         return AuthResponseDto.AdminLogin(
-            accessToken = "",
-            refreshToken = ""
+            accessToken = accessToken,
+            refreshToken = refreshToken
         )
     }
 

@@ -39,7 +39,7 @@ class MemberRequestDto {
         @field:Schema(description = "프로필 이미지", required = false)
         val profileImage: String? = null
     ) {
-        fun toMemberEntity(role: Role):Member {
+        fun toMemberEntity(role: Role, encodedPassword: String):Member {
             return Member().apply {
                 this.socialType = this@CreateMember.socialType
                 this.memberType = MemberType.user
@@ -51,7 +51,7 @@ class MemberRequestDto {
                 this.phoneNumber = this@CreateMember.phoneNumber
                 this.ci = this@CreateMember.ci
                 this.blockYn = YnCode.N
-                this.password = ""
+                this.password = encodedPassword
             }
         }
     }

@@ -5,6 +5,7 @@ enum class ErrorCode(
 ) {
     BAD_REQUEST(""),
     NOT_FOUND(""),
+    DUPLICATE(""),
     INTERNAL_SERVER_ERROR(""),
     NOT_VALID(""),
     FILE_UPLOAD_FAIL(""),
