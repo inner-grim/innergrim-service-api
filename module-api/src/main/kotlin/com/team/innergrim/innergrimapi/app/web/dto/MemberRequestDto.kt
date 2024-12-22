@@ -51,6 +51,7 @@ class MemberRequestDto {
                 this.phoneNumber = this@CreateMember.phoneNumber
                 this.ci = this@CreateMember.ci
                 this.blockYn = YnCode.N
+                this.password = ""
             }
         }
     }
