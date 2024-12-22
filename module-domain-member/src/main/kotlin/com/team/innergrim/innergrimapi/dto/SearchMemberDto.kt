@@ -11,6 +11,7 @@ data class SearchMemberDto(
     val loginId: String? = null,
     val name: String? = null,
     val roleId: Long? = null,
+    val nickname: String? = null,
 ) {
     val specification: Specification<Member> = MemberSpecification.setSpecification(this)
 }

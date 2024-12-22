@@ -60,13 +60,13 @@ class MemberRequestDto {
 
         @field:Schema(description = "닉네임", required = true)
         @NotBlank
-        val nickName: String,
+        val nickname: String,
 
         @field:Schema(description = "성별", required = false)
         val gender: Gender? = null,
     ) {
         fun updateMemberEntity(member: Member): Member {
-            member.nickName = this@CreateOnBoarding.nickName
+            member.nickname = this@CreateOnBoarding.nickname
             member.gender = this@CreateOnBoarding.gender
             return member
         }
@@ -75,6 +75,6 @@ class MemberRequestDto {
     data class DuplicateNickname(
         @field:Schema(description = "닉네임", required = true)
         @NotBlank
-        val nickName: String,
+        val nickname: String,
     ) {}
 }

@@ -32,7 +32,7 @@ class MemberController(
 
     @Operation(summary = "닉네임 중복 검사", description = "닉네임 중복 검사")
     @GetMapping("/duplicate/nickname")
-    fun getDuplicateNickname(duplicateNicknameDto :MemberRequestDto.DuplicateNickname): BaseResponse<Member> {
+    fun getDuplicateNickname(duplicateNicknameDto :MemberRequestDto.DuplicateNickname): BaseResponse<Boolean> {
         return BaseResponse.successWithData(memberService.getDuplicateNickname(duplicateNicknameDto))
     }
 

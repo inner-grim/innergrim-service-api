@@ -33,12 +33,13 @@ class MemberService (
         ).orElseThrow { BusinessException(ErrorCode.NOT_FOUND, "member") }
     }
 
-    fun getDuplicateNickname(duplicateNicknameDto: MemberRequestDto.DuplicateNickname): Member {
-        memberDomainService.getMemberDetail(
+    fun getDuplicateNickname(duplicateNicknameDto: MemberRequestDto.DuplicateNickname): Boolean {
+        return memberDomainService.getMemberDetail(
             SearchMemberDto(
-                id = id,
+                nickname = duplicateNicknameDto.nickname,
                 memberType = MemberType.user
             ).specification
+        ).isPresent
     }
 
     // ::::: [CREATE] :::::

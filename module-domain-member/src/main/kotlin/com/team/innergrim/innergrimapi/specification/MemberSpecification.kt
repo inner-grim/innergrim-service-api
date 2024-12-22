@@ -39,6 +39,13 @@ object MemberSpecification {
             })
         }
 
+        // 닉네임
+        if (!searchDto.nickname.isNullOrEmpty()) {
+            spec = spec.and(Specification { root, query, criteriaBuilder ->
+                criteriaBuilder.equal(root.get<String>("nickname"), searchDto.nickname)
+            })
+        }
+
         // 멤버십
         if (searchDto.roleId != null) {
             spec = spec.and(Specification { root, query, criteriaBuilder ->
