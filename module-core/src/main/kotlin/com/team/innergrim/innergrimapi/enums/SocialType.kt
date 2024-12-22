@@ -5,4 +5,5 @@ enum class SocialType(
     kakao,
     apple,
     google,
+    none,
 }

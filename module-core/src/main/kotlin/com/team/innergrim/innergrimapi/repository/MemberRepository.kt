@@ -8,5 +8,5 @@ import java.util.*
 
 @Repository
 interface MemberRepository : JpaRepository<Member, Long>, JpaSpecificationExecutor<Member> {
-    fun findBySocialId(socialId: String): Optional<Member>
+    fun findByLoginId(loginId: String): Optional<Member>
 }

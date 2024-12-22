@@ -3,6 +3,7 @@ package com.team.innergrim.innergrimapi.app.web.dto
 import com.team.innergrim.innergrimapi.entity.Member
 import com.team.innergrim.innergrimapi.entity.Role
 import com.team.innergrim.innergrimapi.enums.Gender
+import com.team.innergrim.innergrimapi.enums.MemberType
 import com.team.innergrim.innergrimapi.enums.SocialType
 import com.team.innergrim.innergrimapi.enums.YnCode
 import io.swagger.v3.oas.annotations.media.Schema
@@ -16,9 +17,9 @@ class MemberRequestDto {
         @field:NotNull
         val socialType: SocialType,
 
-        @field:Schema(description = "소셜 ID", required = true)
+        @field:Schema(description = "로그인 ID", required = true)
         @field:NotBlank
-        val socialId: String,
+        val loginId: String,
 
         @field:Schema(description = "이름", required = false)
         val name: String? = null,
@@ -38,38 +39,42 @@ class MemberRequestDto {
         @field:Schema(description = "프로필 이미지", required = false)
         val profileImage: String? = null
     ) {
-        fun toMemberEntity(role: Role):Member {
+        fun toMemberEntity(role: Role, encodedPassword: String):Member {
             return Member().apply {
                 this.socialType = this@CreateMember.socialType
+                this.memberType = MemberType.user
                 this.role = role
-                this.socialId = this@CreateMember.socialId
+                this.loginId = this@CreateMember.loginId
                 this.name = this@CreateMember.name
                 this.email = this@CreateMember.email
                 this.birthDate = this@CreateMember.birthDate
                 this.phoneNumber = this@CreateMember.phoneNumber
                 this.ci = this@CreateMember.ci
                 this.blockYn = YnCode.N
+                this.password = encodedPassword
             }
         }
     }
 
     data class CreateOnBoarding(
 
-        @field:Schema(description = "ID", required = true)
-        @NotNull
-        val id: Long,
-
         @field:Schema(description = "닉네임", required = true)
         @NotBlank
-        val nickName: String,
+        val nickname: String,
 
         @field:Schema(description = "성별", required = false)
         val gender: Gender? = null,
     ) {
         fun updateMemberEntity(member: Member): Member {
-            member.nickName = this@CreateOnBoarding.nickName
+            member.nickname = this@CreateOnBoarding.nickname
             member.gender = this@CreateOnBoarding.gender
             return member
         }
     }
+
+    data class DuplicateNickname(
+        @field:Schema(description = "닉네임", required = true)
+        @NotBlank
+        val nickname: String,
+    ) {}
 }

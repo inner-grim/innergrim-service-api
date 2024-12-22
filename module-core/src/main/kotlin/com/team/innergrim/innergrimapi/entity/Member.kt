@@ -2,6 +2,7 @@ package com.team.innergrim.innergrimapi.entity
 
 import com.team.innergrim.innergrimapi.base.BaseEntity
 import com.team.innergrim.innergrimapi.enums.Gender
+import com.team.innergrim.innergrimapi.enums.MemberType
 import com.team.innergrim.innergrimapi.enums.SocialType
 import com.team.innergrim.innergrimapi.enums.YnCode
 import jakarta.persistence.*
@@ -15,14 +16,23 @@ class Member() : BaseEntity() {
     @JoinColumn(name = "role_id", nullable = false)
     lateinit var role: Role
 
+    @Comment("로그인 ID")
+    @Column(name = "login_id", nullable = false, length = 255)
+    lateinit var loginId: String
+
+    @Comment("로그인 비밀번호")
+    @Column(name = "password", nullable = false, length = 255)
+    lateinit var password: String
+
+    @Enumerated(EnumType.STRING)
+    @Comment("멤버 type")
+    @Column(name = "member_type", nullable = false, length = 20)
+    lateinit var memberType: MemberType
+
     @Enumerated(EnumType.STRING)
     @Comment("소셜 type")
     @Column(name = "social_type", nullable = false, length = 20)
     lateinit var socialType: SocialType
-
-    @Comment("소셜 ID")
-    @Column(name = "social_id", nullable = false, length = 255)
-    lateinit var socialId: String
 
     @Comment("이름")
     @Column(name = "name", nullable = true, length = 255)
@@ -45,8 +55,8 @@ class Member() : BaseEntity() {
     var ci: String? = null
 
     @Comment("닉네임")
-    @Column(name = "nick_name", nullable = true, length = 255)
-    var nickName: String? = null
+    @Column(name = "nickname", nullable = true, length = 255)
+    var nickname: String? = null
 
     @Enumerated(EnumType.STRING)
     @Comment("성별")

@@ -18,10 +18,17 @@ object MemberSpecification {
             })
         }
 
-        // SocialId
-        if (!searchDto.socialId.isNullOrEmpty()) {
+        // memberId
+        if (!searchDto.loginId.isNullOrEmpty()) {
             spec = spec.and(Specification { root, query, criteriaBuilder ->
-                criteriaBuilder.equal(root.get<String>("socialId"), searchDto.socialId)
+                criteriaBuilder.equal(root.get<String>("loginId"), searchDto.loginId)
+            })
+        }
+
+        // memberType
+        if (searchDto.memberType != null) {
+            spec = spec.and(Specification { root, query, criteriaBuilder ->
+                criteriaBuilder.equal(root.get<String>("memberType"), searchDto.memberType.name)
             })
         }
 
@@ -29,6 +36,13 @@ object MemberSpecification {
         if (!searchDto.name.isNullOrEmpty()) {
             spec = spec.and(Specification { root, query, criteriaBuilder ->
                 criteriaBuilder.equal(root.get<String>("name"), searchDto.name)
+            })
+        }
+
+        // 닉네임
+        if (!searchDto.nickname.isNullOrEmpty()) {
+            spec = spec.and(Specification { root, query, criteriaBuilder ->
+                criteriaBuilder.equal(root.get<String>("nickname"), searchDto.nickname)
             })
         }
 
