@@ -4,9 +4,11 @@ import com.team.innergrim.innergrimapi.app.web.dto.MemberRequestDto
 import com.team.innergrim.innergrimapi.dto.SearchMemberDto
 import com.team.innergrim.innergrimapi.entity.Member
 import com.team.innergrim.innergrimapi.enums.ErrorCode
+import com.team.innergrim.innergrimapi.enums.MemberType
 import com.team.innergrim.innergrimapi.exception.BusinessException
 import com.team.innergrim.innergrimapi.service.MemberDomainService
 import com.team.innergrim.innergrimapi.service.RoleDomainService
+import com.team.innergrim.innergrimapi.utils.JwtUtil
 import com.team.innergrim.innergrimapi.utils.RedisUtil
 import org.springframework.stereotype.Service
 
@@ -26,6 +28,7 @@ class MemberService (
         return memberDomainService.getMemberDetail(
             SearchMemberDto(
                 id = id,
+                memberType = MemberType.user
             ).specification
         ).orElseThrow { BusinessException(ErrorCode.NOT_FOUND, "member") }
     }
@@ -41,7 +44,7 @@ class MemberService (
     // ::::: [UPDATE] :::::
 
     fun createOnBoarding(createMemberRequestDto: MemberRequestDto.CreateOnBoarding) {
-        val member = memberDomainService.getMemberDetail(createMemberRequestDto.id)
+        val member = memberDomainService.getMemberDetail(JwtUtil.getUsername().toLong())
             .orElseThrow { BusinessException(ErrorCode.NOT_FOUND, "member") }
         createMemberRequestDto.updateMemberEntity(member)
         memberDomainService.updateMember(member)

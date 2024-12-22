@@ -4,6 +4,7 @@ import com.team.innergrim.innergrimapi.app.web.dto.AuthRequestDto
 import com.team.innergrim.innergrimapi.app.web.dto.AuthResponseDto
 import com.team.innergrim.innergrimapi.dto.SearchMemberDto
 import com.team.innergrim.innergrimapi.enums.ErrorCode
+import com.team.innergrim.innergrimapi.enums.MemberType
 import com.team.innergrim.innergrimapi.exception.BusinessException
 import com.team.innergrim.innergrimapi.service.MemberDomainService
 import com.team.innergrim.innergrimapi.utils.AES256EncryptUtil
@@ -31,13 +32,14 @@ class AuthService (
         // 1. 사용자 조회
         val member = memberDomainService.getMemberDetail(
                 SearchMemberDto(
-                    socialId = memberLoginDto.socialId,
+                    loginId = memberLoginDto.loginId,
+                    memberType = MemberType.user
                 ).specification
                 ).orElseThrow{BusinessException(ErrorCode.NOT_FOUND, "member") }
 
         // 2. 인증처리
         val authenticationToken = UsernamePasswordAuthenticationToken(
-            member.socialId, passwordEncoder.encode("")
+            member.loginId, passwordEncoder.encode("")
         )
 
         // 3. token 생성
@@ -52,26 +54,12 @@ class AuthService (
             , JwtUtil.getAccessTokenExpiry()
         )
 
-//        redisTemplate.opsForValue().set(
-//            "member_accessToken_${member.id.toString()}",
-//            accessToken,
-//            JwtUtil.getAccessTokenExpiry(), // Redis에 저장될 Access token의 만료 시간
-//            TimeUnit.MILLISECONDS
-//        )
-
         redisUtil.setRedisValue(
             "member_refreshToken"
             , member.id.toString()
             , refreshToken
             , JwtUtil.getAccessTokenExpiry()
         )
-
-//        redisTemplate.opsForValue().set(
-//            "member_refreshToken_${member.id.toString()}",
-//            refreshToken,
-//            JwtUtil.getRefreshTokenExpiry(), // Redis에 저장될 refresh token의 만료 시간
-//            TimeUnit.MILLISECONDS
-//        )
 
         return AuthResponseDto.MemberLogin(
             accessToken = accessToken,

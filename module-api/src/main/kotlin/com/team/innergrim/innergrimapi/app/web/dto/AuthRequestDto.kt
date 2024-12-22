@@ -24,13 +24,14 @@ class AuthRequestDto {
 
     data class MemberLogin(
 
+        @field:Schema(description = "멤버 ID", required = true)
+        @field:NotBlank
+        val loginId: String,
+
         @field:Schema(description = "소셜 Type", required = true)
         @field:NotNull
         val socialType: SocialType,
 
-        @field:Schema(description = "소셜 ID", required = true)
-        @field:NotBlank
-        val socialId: String,
     ) {}
 
     data class AdminLogin(
