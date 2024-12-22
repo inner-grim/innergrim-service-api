@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS member (
     birth_date varchar(8) null comment '생년월일',
     phone_number varchar(20) null comment '전화번호',
     ci varchar(255) null comment 'ci',
-    nick_name varchar(255) null comment '닉네임',
+    nickname varchar(255) null comment '닉네임',
     gender varchar(20) null comment '성별',
     profile_image varchar(255) null comment '프로필 이미지',
     block_yn char not null default 'N' comment '정지 여부',

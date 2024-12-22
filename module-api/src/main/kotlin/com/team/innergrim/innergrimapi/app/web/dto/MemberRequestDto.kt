@@ -71,4 +71,10 @@ class MemberRequestDto {
             return member
         }
     }
+
+    data class DuplicateNickname(
+        @field:Schema(description = "닉네임", required = true)
+        @NotBlank
+        val nickName: String,
+    ) {}
 }

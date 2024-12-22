@@ -55,7 +55,7 @@ class Member() : BaseEntity() {
     var ci: String? = null
 
     @Comment("닉네임")
-    @Column(name = "nick_name", nullable = true, length = 255)
+    @Column(name = "nickname", nullable = true, length = 255)
     var nickName: String? = null
 
     @Enumerated(EnumType.STRING)

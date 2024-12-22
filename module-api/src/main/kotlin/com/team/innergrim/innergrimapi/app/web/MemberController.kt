@@ -30,6 +30,13 @@ class MemberController(
         return BaseResponse.successWithData(memberService.getMemberDetail(id))
     }
 
+    @Operation(summary = "닉네임 중복 검사", description = "닉네임 중복 검사")
+    @GetMapping("/duplicate/nickname")
+    fun getDuplicateNickname(duplicateNicknameDto :MemberRequestDto.DuplicateNickname): BaseResponse<Member> {
+        return BaseResponse.successWithData(memberService.getDuplicateNickname(duplicateNicknameDto))
+    }
+
+
     // ::::: [POST] :::::
     @Operation(summary = "회원 생성", description = "회원 생성")
     @PostMapping

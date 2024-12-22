@@ -33,6 +33,14 @@ class MemberService (
         ).orElseThrow { BusinessException(ErrorCode.NOT_FOUND, "member") }
     }
 
+    fun getDuplicateNickname(duplicateNicknameDto: MemberRequestDto.DuplicateNickname): Member {
+        memberDomainService.getMemberDetail(
+            SearchMemberDto(
+                id = id,
+                memberType = MemberType.user
+            ).specification
+    }
+
     // ::::: [CREATE] :::::
 
     fun createMember(createMemberRequestDto: MemberRequestDto.CreateMember) {
@@ -49,4 +57,6 @@ class MemberService (
         createMemberRequestDto.updateMemberEntity(member)
         memberDomainService.updateMember(member)
     }
+
+
 }
