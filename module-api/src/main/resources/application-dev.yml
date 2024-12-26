@@ -63,3 +63,6 @@ logging:
 aws:
   image-url: https://dev-innergrim.s3.ap-northeast-2.amazonaws.com
   bucket: dev-innergrim
+
+chatbot:
+  base-url: http://innergrim-chatbot:8000

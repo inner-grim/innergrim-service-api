@@ -20,13 +20,9 @@ class ExternalApiService (
     }
 
     // ::::: [POST] :::::
-    fun postData(): Mono<String> {
-        val requestBody = mapOf(
-            "user_input" to "안녕"
-        )
-
+    fun <T : Any> postData(endpoint: String, requestBody: T): Mono<String> {
         return webClient.post()
-            .uri("/chatbot/get-response/") // baseUrl에 추가되는 경로
+            .uri(endpoint) // baseUrl에 추가되는 경로
             .bodyValue(requestBody) // 요청 본문 설정
             .retrieve()
             .bodyToMono(String::class.java) // 원하는 반환 타입
