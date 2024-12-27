@@ -9,16 +9,24 @@ class RedisUtil(
     private val redisTemplate: RedisTemplate<String, String>
 ) {
 
-    fun getRedisValue(keyType: String, keyValue: String): String? {
-        return redisTemplate.opsForValue().get("${keyType}_${keyValue}")
+    fun getRedisValue(key: String): String? {
+        return redisTemplate.opsForValue().get(key)
     }
 
-    fun setRedisValue(keyType: String, keyValue: String, data:String, timeout: Long) {
-        redisTemplate.opsForValue().set(
-            "${keyType}_${keyValue}"
-            , data
-            , timeout
-            , TimeUnit.MILLISECONDS
-        )
+    fun setRedisValue (key: String, value: String, timeout: Long, timeUnit: TimeUnit) {
+        redisTemplate.opsForValue().set(key, value, timeout, timeUnit)
+    }
+
+    fun setRedisValueMap(key: String, valueMap: Map<String, String>) {
+        redisTemplate.opsForHash<String, String>().putAll(key, valueMap)
+    }
+
+    fun setExpire (key: String, timeout: Long, timeUnit: TimeUnit) {
+        redisTemplate.expire(key, timeout, timeUnit)
+    }
+
+    fun deleteMemberTokens(id: String) {
+        val memberKey = "member:$id"
+        redisTemplate.delete(memberKey)
     }
 }
