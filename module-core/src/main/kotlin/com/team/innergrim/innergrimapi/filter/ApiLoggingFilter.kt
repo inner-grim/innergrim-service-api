@@ -16,9 +16,9 @@ import java.io.*
 /**
  * 요청 응답 로깅 필터
  */
-class RequestResponseLoggingFilter : OncePerRequestFilter() {
+class ApiLoggingFilter : OncePerRequestFilter() {
 
-    private val logger = LoggerFactory.getLogger(RequestResponseLoggingFilter::class.java)
+    private val logger = LoggerFactory.getLogger(ApiLoggingFilter::class.java)
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -34,14 +34,12 @@ class RequestResponseLoggingFilter : OncePerRequestFilter() {
             // 요청 바디 읽기
             val requestBody = wrappedRequest.reader.lines().reduce { acc, s -> acc + s }.orElse("")
 
-            logger.info(
-                """
-            ::::: [Request] :::::
-            [uri] = ${wrappedRequest.requestURI}
-            [method] = ${wrappedRequest.method}
-            [body] = $requestBody
-            """
-            )
+            logger.info("""
+                ::::: [Request] :::::
+                [uri] = ${wrappedRequest.requestURI}
+                [method] = ${wrappedRequest.method}
+                [body] = $requestBody
+            """.trimIndent())
 
             // 필터 체인 계속 실행
             filterChain.doFilter(wrappedRequest, wrappedResponse)
@@ -49,13 +47,11 @@ class RequestResponseLoggingFilter : OncePerRequestFilter() {
             // 응답 바디 읽기
             val responseBody = wrappedResponse.getCapturedBody()
 
-            logger.info(
-                """
-            ::::: [Response] :::::
-            [status] = ${wrappedResponse.status}
-            [body] = $responseBody
-            """
-            )
+            logger.info("""
+                ::::: [Response] :::::
+                [status] = ${wrappedResponse.status}
+                [body] = $responseBody
+            """.trimIndent())
 
             // 응답 데이터를 다시 클라이언트로 보내기 위해 출력 스트림에 기록
             response.outputStream.write(responseBody.toByteArray())
