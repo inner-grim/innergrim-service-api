@@ -99,7 +99,7 @@ class AuthService (
         val memberId = JwtUtil.getUsername(issueAccessTokenDto.refreshToken)
 
         // 2. Redis에서 refreshToken 조회
-        val savedRefreshToken = redisTemplate.opsForValue().get("member_refreshToken_${memberId}")
+        val savedRefreshToken = redisUtil.getRedisValue("member:${memberId}:refreshToken")
         if (savedRefreshToken.isNullOrEmpty() || savedRefreshToken != issueAccessTokenDto.refreshToken) {
             throw BusinessException(ErrorCode.NOT_FOUND, "RefreshToken Is Not Found or Mismatch")
         }
