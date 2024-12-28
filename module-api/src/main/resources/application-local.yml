@@ -69,3 +69,4 @@ aws:
 
 chatbot:
   base-url: http://innergrim-chatbot:8000
+

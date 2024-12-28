@@ -9,9 +9,7 @@ import org.springframework.security.core.userdetails.User
 import java.util.*
 
 object JwtUtil {
-
-    private val secret = "yourSecretKey"
-    private val tokenKey = Algorithm.HMAC256(secret)
+    private val tokenKey = Algorithm.HMAC256("innergrim-token-key-string")
     private val accessTokenValidity: Long = 1000L * 60 * 60 // 1시간 유효
     private val refreshTokenValidity: Long = 1000L * 60 * 60 * 24 * 30 // 한달 유효
 
