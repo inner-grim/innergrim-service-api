@@ -31,9 +31,8 @@ class AuthController(
 
     @Operation(summary = "AccessToken 발급", description = "AccessToken 발급")
     @PostMapping("/issue/access-token")
-    fun issueAccessToken(@RequestBody @Valid issueAccessTokenDto: AuthRequestDto.IssueAccessToken): BaseResponse<Unit> {
-        authService.issueAccessToken(issueAccessTokenDto)
-        return BaseResponse.successWithoutData()
+    fun issueAccessToken(@RequestBody @Valid issueAccessTokenDto: AuthRequestDto.IssueAccessToken): BaseResponse<AuthResponseDto.IssueAccessToken> {
+        return BaseResponse.successWithData(authService.issueAccessToken(issueAccessTokenDto))
     }
 
     @Operation(summary = "회원 로그인", description = "회원 로그인")

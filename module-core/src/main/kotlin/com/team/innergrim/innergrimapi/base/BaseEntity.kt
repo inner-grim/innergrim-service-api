@@ -16,7 +16,7 @@ abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("ID")
     @Column(name = "id", nullable = false)
-    var id: Long? = null
+    var id: Long = 0
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

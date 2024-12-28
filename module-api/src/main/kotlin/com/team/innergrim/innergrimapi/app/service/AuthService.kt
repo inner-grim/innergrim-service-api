@@ -14,13 +14,12 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.concurrent.TimeUnit
 
 @Service
 class AuthService (
     private val memberDomainService: MemberDomainService,
-    private val passwordEncoder: PasswordEncoder,
     @Autowired val redisTemplate: RedisTemplate<String, String>,
     private val redisUtil: RedisUtil,
     private val authenticationManager: AuthenticationManager,
@@ -50,19 +49,7 @@ class AuthService (
         val refreshToken = JwtUtil.createRefreshToken(member.id.toString())
 
         // 4. redis에 토큰 저장
-        redisUtil.setRedisValue(
-            "member_accessToken"
-            , member.id.toString()
-            , accessToken
-            , JwtUtil.getAccessTokenExpiry()
-        )
-
-        redisUtil.setRedisValue(
-            "member_refreshToken"
-            , member.id.toString()
-            , refreshToken
-            , JwtUtil.getAccessTokenExpiry()
-        )
+        this.saveMemberTokens(member.id, accessToken, refreshToken, JwtUtil.getAccessTokenExpiry(), JwtUtil.getRefreshTokenExpiry())
 
         return AuthResponseDto.MemberLogin(
             accessToken = accessToken,
@@ -89,19 +76,7 @@ class AuthService (
         val refreshToken = JwtUtil.createRefreshToken(member.id.toString())
 
         // 4. redis에 토큰 저장
-        redisUtil.setRedisValue(
-            "admin_accessToken"
-            , member.id.toString()
-            , accessToken
-            , JwtUtil.getAccessTokenExpiry()
-        )
-
-        redisUtil.setRedisValue(
-            "admin_refreshToken"
-            , member.id.toString()
-            , refreshToken
-            , JwtUtil.getAccessTokenExpiry()
-        )
+        this.saveMemberTokens(member.id, accessToken, refreshToken, JwtUtil.getAccessTokenExpiry(), JwtUtil.getRefreshTokenExpiry())
 
         // 5. 응답
         return AuthResponseDto.AdminLogin(
@@ -131,24 +106,45 @@ class AuthService (
 
         // 3. 새로운 accessToken 생성
         val newAccessToken = JwtUtil.createAccessToken(memberId)
-        redisUtil.setRedisValue(
-            "member_accessToken"
-            , memberId
-            , newAccessToken
-            ,JwtUtil.getAccessTokenExpiry()
-        )
-
-//        redisTemplate.opsForValue().set(
-//            "member_accessToken_${memberId}",
-//            newAccessToken,
-//            JwtUtil.getAccessTokenExpiry(), // Redis에 저장될 Access token의 만료 시간
-//            TimeUnit.MILLISECONDS
-//        )
+        this.saveAccessToken(memberId.toLong(), newAccessToken, JwtUtil.getAccessTokenExpiry())
 
         // 4. 반환
         return AuthResponseDto.IssueAccessToken(
             accessToken = newAccessToken,
             refreshToken = issueAccessTokenDto.refreshToken // 기존 refreshToken 그대로 반환
+        )
+    }
+
+    private fun saveMemberTokens (
+        id: Long,
+        accessToken: String,
+        refreshToken: String,
+        accessTokenExpireTime: Long,
+        refreshTokenExpireTime: Long
+    ) {
+        // accessToken 캐싱
+        this.saveAccessToken(id, accessToken, accessTokenExpireTime)
+        // refreshToken 캐싱
+        this.saveRefreshToken(id, refreshToken, refreshTokenExpireTime)
+    }
+
+    private fun saveAccessToken (id: Long, accessToken: String, accessTokenExpireTime: Long) {
+        val accessTokenKey = "member:$id:accessToken"
+        redisUtil.setRedisValue(
+            accessTokenKey,
+            accessToken,
+            accessTokenExpireTime,
+            TimeUnit.MILLISECONDS
+        )
+    }
+
+    private fun saveRefreshToken (id: Long, refreshToken: String, refreshTokenExpireTime: Long) {
+        val refreshTokenKey = "member:$id:refreshToken"
+        redisUtil.setRedisValue(
+            refreshTokenKey,
+            refreshToken,
+            refreshTokenExpireTime,
+            TimeUnit.MILLISECONDS
         )
     }
 }

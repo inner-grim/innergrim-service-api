@@ -12,11 +12,7 @@ class ApiLoggingInterceptor : HandlerInterceptor {
     private val logger = LoggerFactory.getLogger(ApiLoggingInterceptor::class.java)
 
     override fun afterCompletion(request: HttpServletRequest, response: HttpServletResponse, handler: Any, ex: Exception?) {
-        logger.info(
-            """
-            ::::: [Save Api Logging] :::::
-            """
-        )
+
     }
 
 }
