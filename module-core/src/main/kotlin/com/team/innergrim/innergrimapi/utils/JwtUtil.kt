@@ -51,13 +51,6 @@ object JwtUtil {
         return createToken(id, refreshTokenValidity)
     }
 
-//    fun getAccessToken() {
-//        val bearerToken = request.getHeader("Authorization")
-//        return if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-//            bearerToken.substring(7) // "Bearer " 이후의 토큰 부분 추출
-//        } else null
-//    }
-
     private fun createToken(id: String, validity: Long): String {
         val now = Date()
         val expiryDate = Date(now.time + validity) // 현재 시간에서 유효 기간만큼 더해 만료시간 설정

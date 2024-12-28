@@ -2,6 +2,7 @@ package com.team.innergrim.innergrimapi.config
 
 import com.team.innergrim.innergrimapi.filter.JwtAuthenticationFilter
 import com.team.innergrim.innergrimapi.service.CustomUserDetailService
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
@@ -22,6 +24,21 @@ class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
     private val customUserDetailService: CustomUserDetailService
 ) {
+
+    companion object {
+        val EXCLUDE_PATHS = arrayOf(
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/css/**",
+            "/js/**",
+            "/health",
+            "/auth/member/login",
+            "/auth/admin/login",
+            "/auth/validate/access-token",
+            "/auth/issue/access-token"
+        )
+    }
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
@@ -33,24 +50,15 @@ class SecurityConfig(
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
                     .requestMatchers(
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/css/**",
-                        "/js/**"
+                        *EXCLUDE_PATHS
                     ).permitAll()
-                    .requestMatchers("/health").permitAll()
-                    .requestMatchers(
-                        "/auth/member/login",
-                        "/auth/admin/login",
-                        "/auth/validate/access-token",
-                        "/auth/issue/access-token"
-                    ).permitAll() // 로그인 엔드포인트는 누구나 접근 가능
                     .requestMatchers(HttpMethod.POST,"/member").permitAll() // 회원가입은 토큰 불필요
                     .anyRequest().authenticated() // 나머지 요청은 인증 필요
             }
             .authenticationProvider(daoAuthenticationProvider())
             .userDetailsService(customUserDetailService)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .exceptionHandling { exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint()) }
         return http.build()
     }
 
@@ -76,14 +84,12 @@ class SecurityConfig(
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
     }
-}
 
-//class NoPasswordEncoder : PasswordEncoder {
-//    override fun encode(rawPassword: CharSequence): String {
-//        return rawPassword.toString() // 평문 그대로 반환
-//    }
-//
-//    override fun matches(rawPassword: CharSequence, encodedPassword: String): Boolean {
-//        return true // 항상 true 반환하여 비밀번호 검증을 우회
-//    }
-//}
+    // Unauthorized Entry point 설정
+    @Bean
+    fun authenticationEntryPoint(): AuthenticationEntryPoint {
+        return AuthenticationEntryPoint { _, response, _ ->
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+        }
+    }
+}
