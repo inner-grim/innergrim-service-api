@@ -28,9 +28,11 @@ class SecurityConfig(
     companion object {
         val EXCLUDE_PATHS = arrayOf(
             "/swagger-ui/**",
+            "/h2-console/**",
             "/v3/api-docs/**",
             "/css/**",
             "/js/**",
+            "/favicon.ico",
             "/health",
             "/auth/member/login",
             "/auth/admin/login",
