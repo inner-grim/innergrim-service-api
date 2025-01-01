@@ -31,7 +31,9 @@ class WebConfig(
         registry.addMapping("/**") // 모든 경로에 대해 CORS 허용
             .allowedOrigins(
                 "http://localhost:3000",
-                "http://innergrim-cms:8000"
+                "http://http://3.39.72.21/:3000",
+                "http://innergrim-cms:3000",
+                "https://cms.innergrim.info"
             ) // 허용할 Origin
             .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메서드
             .allowedHeaders("*") // 모든 헤더 허용
