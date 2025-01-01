@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service
 class ChatBotService (
     private val externalApiService: ExternalApiService,
 ) {
-    fun sendChat(sendChatList: List<ChatbotRequestDto.SendChat>): ChatbotResponseDto.SendChat {
+    fun sendChat(sendChatRequestDto: ChatbotRequestDto.SendChat): ChatbotResponseDto.SendChat {
         return ChatbotResponseDto.SendChat (
-            answer = externalApiService.postData("/chatbot/get-response/", sendChatList).block()
+            answer = externalApiService.postData("/chatbot/get-response/", sendChatRequestDto).block()
         )
     }
 }

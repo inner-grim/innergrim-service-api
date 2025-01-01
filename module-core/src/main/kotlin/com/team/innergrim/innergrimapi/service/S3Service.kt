@@ -16,8 +16,8 @@ import java.util.*
 @Service
 class S3Service(
     private val s3Client: S3Client,
-    @Value("s3.image-url") private val imageUrl: String,
-    @Value("s3.bucket") private val bucket: String
+    @Value("\${aws.s3.image-url}") private val imageUrl: String,
+    @Value("\${aws.s3.bucket}") private val bucket: String
 ) {
 
     fun uploadFile(multipartFile: MultipartFile, uploadType: UploadType): String {

@@ -6,14 +6,26 @@ import jakarta.validation.constraints.NotNull
 
 class ChatbotRequestDto {
 
-    data class SendChat(
-        @field:Schema(description = "chat", required = true)
+    data class SendChat (
+        @field:Schema(description = "previousConversionList", required = true)
         @field:NotNull
-        val chatRole: ChatRole,
+        val previousConversionList: List<PreviousConversion>,
+
+        @field:Schema(description = "question ", required = true)
+        @field:NotNull
+        val question : String,
+    ) {
+
+    }
+
+    data class PreviousConversion(
+        @field:Schema(description = "chat role", required = true)
+        @field:NotNull
+        val role: ChatRole,
 
         @field:Schema(description = "chat history ", required = true)
         @field:NotNull
-        val content : String,
+        val content: String,
     ) {}
 
 }

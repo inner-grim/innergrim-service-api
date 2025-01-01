@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
 class WebClientConfig(
-    @Value("chatbot.base-url") private val baseUrl: String
+    @Value("\${chatbot.base-url}") private val baseUrl: String
 ) {
 
     @Bean
