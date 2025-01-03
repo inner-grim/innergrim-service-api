@@ -35,8 +35,8 @@
     </springProfile>
 
     <!-- prod 프로파일 -->
-    <springProfile name="prod">
-        <appender name="PROD-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <springProfile name="prd">
+        <appender name="PRD-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>logs/prod-app.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
                 <fileNamePattern>logs/prod-app-%d{yyyy-MM-dd}.log</fileNamePattern>
