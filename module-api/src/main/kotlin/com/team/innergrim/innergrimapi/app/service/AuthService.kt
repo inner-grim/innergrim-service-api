@@ -9,8 +9,6 @@ import com.team.innergrim.innergrimapi.exception.BusinessException
 import com.team.innergrim.innergrimapi.service.MemberDomainService
 import com.team.innergrim.innergrimapi.utils.JwtUtil
 import com.team.innergrim.innergrimapi.utils.RedisUtil
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -20,7 +18,6 @@ import java.util.concurrent.TimeUnit
 @Service
 class AuthService (
     private val memberDomainService: MemberDomainService,
-    @Autowired val redisTemplate: RedisTemplate<String, String>,
     private val redisUtil: RedisUtil,
     private val authenticationManager: AuthenticationManager,
 ) {
@@ -99,7 +96,7 @@ class AuthService (
         val memberId = JwtUtil.getUsername(issueAccessTokenDto.refreshToken)
 
         // 2. Redis에서 refreshToken 조회
-        val savedRefreshToken = redisTemplate.opsForValue().get("member_refreshToken_${memberId}")
+        val savedRefreshToken = redisUtil.getRedisValue("member:${memberId}:refreshToken")
         if (savedRefreshToken.isNullOrEmpty() || savedRefreshToken != issueAccessTokenDto.refreshToken) {
             throw BusinessException(ErrorCode.NOT_FOUND, "RefreshToken Is Not Found or Mismatch")
         }

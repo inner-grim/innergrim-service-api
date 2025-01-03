@@ -9,13 +9,12 @@ spring:
       enabled: false
       path: /h2-console
   datasource:
-    #    driverClassName: org.h2.Driver
-    #    url: jdbc:h2:file:./target/h2db/db/application;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:./target/h2db/db/application;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
     #    url: jdbc:h2:mem:testdb;MODE=MYSQL;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
-    url: jdbc:mysql://localhost:13306/innergrim
-    username: ${datasource.username}
-    password: ${datasource.password}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:13306/innergrim
+    username: sa
+    password:
     hikari:
       minimum-idle: 5                      # 최소 유지할 커넥션 수
       maximum-pool-size: 10                # 최대 커넥션 수
@@ -47,6 +46,8 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
+  batch:
+    initialize-schema: always
 
 logging:
   level:
@@ -62,10 +63,11 @@ logging:
       max-history: 30            # 최대 30일치의 로그 파일 유지
       max-file-size: 10MB        # 하나의 로그 파일의 최대 크기
 
-
 aws:
-  image-url: https://dev-innergrim.s3.ap-northeast-2.amazonaws.com
-  bucket: dev-innergrim
+  s3:
+    image-url: https://dev-innergrim.s3.ap-northeast-2.amazonaws.com
+    bucket: dev-innergrim
 
 chatbot:
-  base-url: http://innergrim-chatbot:8000
+  base-url: http://localhost:8000
+

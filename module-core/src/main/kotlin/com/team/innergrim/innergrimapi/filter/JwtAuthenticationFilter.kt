@@ -1,5 +1,6 @@
 package com.team.innergrim.innergrimapi.filter
 
+import com.team.innergrim.innergrimapi.config.SecurityConfig
 import com.team.innergrim.innergrimapi.service.CustomUserDetailService
 import com.team.innergrim.innergrimapi.utils.JwtUtil
 import com.team.innergrim.innergrimapi.utils.RedisUtil
@@ -11,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
+import org.springframework.util.AntPathMatcher
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
@@ -24,12 +26,17 @@ class JwtAuthenticationFilter(
         private const val AUTHORIZATION_HEADER = "Authorization"
     }
 
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+        // 필터 제외 처리
+        if (SecurityConfig.EXCLUDE_PATHS.any { AntPathMatcher().match(it, request.requestURI) }) {
+            filterChain.doFilter(request, response)
+            return
+        }
+
         try {
             val token = resolveToken(request)
 
@@ -44,11 +51,12 @@ class JwtAuthenticationFilter(
 
                 val userDetails = userDetailsService.loadUserByUsername(id)
                 setAuthentication(userDetails, request)
+            } else {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "AccessToken is invalid")
             }
         } catch (e: Exception) {
             logger.error("JWT Authentication failed: ${e.message}", e)
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.message)
-            return
         }
 
         filterChain.doFilter(request, response)

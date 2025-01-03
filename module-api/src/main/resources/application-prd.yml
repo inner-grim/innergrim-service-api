@@ -61,8 +61,9 @@ logging:
       max-file-size: 10MB        # 하나의 로그 파일의 최대 크기
 
 aws:
-  image-url: https://prd-innergrim.s3.ap-northeast-2.amazonaws.com
-  bucket: prd-innergrim
+  s3:
+    image-url: https://prd-innergrim.s3.ap-northeast-2.amazonaws.com
+    bucket: prd-innergrim
 
 chatbot:
   base-url: http://innergrim-chatbot:8000

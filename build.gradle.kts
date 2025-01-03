@@ -47,6 +47,9 @@ subprojects {
 		// Webflux
 		implementation("org.springframework.boot:spring-boot-starter-webflux")
 
+		// Batch
+		implementation("org.springframework.boot:spring-boot-starter-batch")
+
 		// H2 Database
 		runtimeOnly("com.h2database:h2")
 
@@ -78,6 +81,8 @@ subprojects {
 
 		// mockk
 		testImplementation("io.mockk:mockk:1.13.8")
+
+
 
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

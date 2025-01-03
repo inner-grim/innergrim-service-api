@@ -14,7 +14,7 @@
 - ## How To Build
   - gradlew clean build -x test
 - ## How To Start
-  - [Local] gradlew :module-api:bootrun --args='--spring.profiles.active=local'
+  - [Local] gradlew :module-api:bootRun --args='--spring.profiles.active=local'
 
 - ## Info
   - DB : H2DB
