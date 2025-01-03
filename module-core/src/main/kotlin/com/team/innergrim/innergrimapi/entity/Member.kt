@@ -1,10 +1,8 @@
 package com.team.innergrim.innergrimapi.entity
 
 import com.team.innergrim.innergrimapi.base.BaseEntity
-import com.team.innergrim.innergrimapi.enums.Gender
-import com.team.innergrim.innergrimapi.enums.MemberType
-import com.team.innergrim.innergrimapi.enums.SocialType
-import com.team.innergrim.innergrimapi.enums.YnCode
+import com.team.innergrim.innergrimapi.enums.*
+import com.team.innergrim.innergrimapi.utils.DateTimeUtils
 import jakarta.persistence.*
 import org.hibernate.annotations.Comment
 
@@ -68,8 +66,13 @@ class Member() : BaseEntity() {
     var profileImage: String? = null
 
     @Enumerated(EnumType.STRING)
-    @Comment("정지 여부")
-    @Column(name = "block_yn", nullable = false, length = 1)
-    lateinit var blockYn: YnCode
+    @Comment("멤버 상태")
+    @Column(name = "member_status", nullable = false, length = 50)
+    lateinit var memberStatus: MemberStatus
 
+    fun delete (memberStatus: MemberStatus) {
+        this.loginId = "${DateTimeUtils.getDateTimeNow(DateTimeUtils.FORMAT_yyyyMMddHHmmss)}_${memberStatus.name}_${loginId}"
+        this.memberStatus = memberStatus
+        this.status = Status.deleted
+    }
 }

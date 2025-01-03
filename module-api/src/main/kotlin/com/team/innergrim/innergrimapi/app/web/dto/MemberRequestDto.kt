@@ -3,9 +3,9 @@ package com.team.innergrim.innergrimapi.app.web.dto
 import com.team.innergrim.innergrimapi.entity.Member
 import com.team.innergrim.innergrimapi.entity.Role
 import com.team.innergrim.innergrimapi.enums.Gender
+import com.team.innergrim.innergrimapi.enums.MemberStatus
 import com.team.innergrim.innergrimapi.enums.MemberType
 import com.team.innergrim.innergrimapi.enums.SocialType
-import com.team.innergrim.innergrimapi.enums.YnCode
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -50,7 +50,7 @@ class MemberRequestDto {
                 this.birthDate = this@CreateMember.birthDate
                 this.phoneNumber = this@CreateMember.phoneNumber
                 this.ci = this@CreateMember.ci
-                this.blockYn = YnCode.N
+                this.memberStatus = MemberStatus.normal
                 this.password = encodedPassword
             }
         }
