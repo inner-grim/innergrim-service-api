@@ -1,7 +1,7 @@
 
-INSERT INTO role (name) values ('NORMAL');
-INSERT INTO role (name) values ('VIP');
-INSERT INTO role (name) values ('ADMIN');
+INSERT INTO role (role_type) values ('role_user');
+INSERT INTO role (role_type) values ('role_user_vip');
+INSERT INTO role (role_type) values ('role_admin');
 
 insert into member (role_id,login_id,password,member_type,social_type, name, email, birth_date, phone_number, member_status)
 values (1,'00000001','$2a$10$SBsIQOFu9uf9qYe7ANuTmeaOEsVicZhwtDxE5xCBd0REoQVx8G9LO','user','kakao','테스트유저','test1@test.com','20000101','01011112222','normal');
