@@ -26,7 +26,7 @@ class SecurityConfig(
 ) {
 
     companion object {
-        val EXCLUDE_PATHS = arrayOf(
+        val EXCLUDE_PATHS_GET = arrayOf(
             "/swagger-ui/**",
             "/h2-console/**",
             "/v3/api-docs/**",
@@ -39,6 +39,11 @@ class SecurityConfig(
             "/auth/validate/access-token",
             "/auth/issue/access-token"
         )
+
+        val EXCLUDE_PATHS_POST = arrayOf(
+            "/member"
+        )
+
     }
 
     @Bean
@@ -52,9 +57,12 @@ class SecurityConfig(
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
                     .requestMatchers(
-                        *EXCLUDE_PATHS
+                        *EXCLUDE_PATHS_GET
                     ).permitAll()
-                    .requestMatchers(HttpMethod.POST,"/member").permitAll() // 회원가입은 토큰 불필요
+                    .requestMatchers(
+                        HttpMethod.POST,
+                        *EXCLUDE_PATHS_POST
+                    ).permitAll() // 회원가입은 토큰 불필요
                     .anyRequest().authenticated() // 나머지 요청은 인증 필요
             }
             .authenticationProvider(daoAuthenticationProvider())

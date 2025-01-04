@@ -32,7 +32,13 @@ class JwtAuthenticationFilter(
         filterChain: FilterChain
     ) {
         // 필터 제외 처리
-        if (SecurityConfig.EXCLUDE_PATHS.any { AntPathMatcher().match(it, request.requestURI) }) {
+        val isExcludedPath = when (request.method) {
+            "GET" -> SecurityConfig.EXCLUDE_PATHS_GET.any { AntPathMatcher().match(it, request.requestURI) }
+            "POST" -> SecurityConfig.EXCLUDE_PATHS_POST.any { AntPathMatcher().match(it, request.requestURI) }
+            else -> false
+        }
+
+        if (isExcludedPath) {
             filterChain.doFilter(request, response)
             return
         }
@@ -53,10 +59,12 @@ class JwtAuthenticationFilter(
                 setAuthentication(userDetails, request)
             } else {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "AccessToken is invalid")
+                return
             }
         } catch (e: Exception) {
             logger.error("JWT Authentication failed: ${e.message}", e)
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.message)
+            return
         }
 
         filterChain.doFilter(request, response)
