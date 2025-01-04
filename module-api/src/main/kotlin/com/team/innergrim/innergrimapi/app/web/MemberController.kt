@@ -52,4 +52,12 @@ class MemberController(
         return BaseResponse.successWithoutData()
     }
 
+    // ::::: [DELETE]
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴")
+    @DeleteMapping
+    fun deleteMember(): BaseResponse<Unit> {
+        memberService.deleteMember()
+        return BaseResponse.successWithoutData()
+    }
+
 }

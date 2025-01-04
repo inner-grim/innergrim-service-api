@@ -25,8 +25,8 @@ class RedisUtil(
         redisTemplate.expire(key, timeout, timeUnit)
     }
 
-    fun deleteMemberTokens(id: String) {
-        val memberKey = "member:$id"
-        redisTemplate.delete(memberKey)
+    fun delete(key: String) {
+        redisTemplate.delete(key)
     }
+
 }

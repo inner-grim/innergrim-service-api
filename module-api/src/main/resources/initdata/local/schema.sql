@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS member (
     nickname varchar(20) null comment '닉네임',
     gender varchar(20) null comment '성별',
     profile_image varchar(255) null comment '프로필 이미지',
-    block_yn char not null default 'N' comment '정지 여부',
+    member_status varchar(50) not null comment '멤버 상태',
     status varchar(20) not null default 'active' comment '상태',
     created_at datetime null default current_timestamp comment '생성 시간',
     updated_at datetime null comment '수정 시간'
