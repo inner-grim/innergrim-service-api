@@ -2,10 +2,12 @@ package com.team.innergrim.innergrimapi.app.service
 
 import com.team.innergrim.innergrimapi.app.web.dto.MemberRequestDto
 import com.team.innergrim.innergrimapi.dto.SearchMemberDto
+import com.team.innergrim.innergrimapi.dto.SearchRoleDto
 import com.team.innergrim.innergrimapi.entity.Member
 import com.team.innergrim.innergrimapi.enums.ErrorCode
 import com.team.innergrim.innergrimapi.enums.MemberStatus
 import com.team.innergrim.innergrimapi.enums.MemberType
+import com.team.innergrim.innergrimapi.enums.RoleType
 import com.team.innergrim.innergrimapi.exception.BusinessException
 import com.team.innergrim.innergrimapi.service.MemberDomainService
 import com.team.innergrim.innergrimapi.service.RoleDomainService
@@ -48,8 +50,23 @@ class MemberService (
     // ::::: [CREATE] :::::
 
     fun createMember(createMemberRequestDto: MemberRequestDto.CreateMember) {
-        val role = roleDomainService.getMemberDetail(1L)
-            .orElseThrow{ BusinessException(ErrorCode.NOT_FOUND, "membership") }
+
+        // member 중복 체크
+        memberDomainService.getMemberDetail(
+            SearchMemberDto(
+                loginId = createMemberRequestDto.loginId,
+                memberType = MemberType.user,
+                socialType = createMemberRequestDto.socialType
+            ).specification
+        ).ifPresent { (throw BusinessException(ErrorCode.DUPLICATE, "member")) }
+
+        // role 조회
+        val role = roleDomainService.getRoleDetail(
+            SearchRoleDto(
+                roleType = RoleType.role_user
+            ).specification
+        ).orElseThrow{ BusinessException(ErrorCode.NOT_FOUND, "role") }
+
         memberDomainService.createMember(createMemberRequestDto.toMemberEntity(role, passwordEncoder.encode("")))
     }
 
@@ -84,8 +101,12 @@ class MemberService (
             .orElseThrow { BusinessException(ErrorCode.NOT_FOUND, "member") }
 
         // 멤버 삭제 처리
-        member.delete(MemberStatus.withdraw);
-        memberDomainService.updateMember(member)
+        try {
+            member.delete(MemberStatus.withdraw);
+            memberDomainService.updateMember(member)
+        } catch (e: Exception) {
+            throw BusinessException(ErrorCode.DELETE_FAIL, "member")
+        }
 
         // 토큰 제거
         redisUtil.delete("${this.getMemberCacheKey(member.id)}:accessToken");

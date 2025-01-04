@@ -5,6 +5,7 @@ import com.team.innergrim.innergrimapi.app.web.dto.AuthResponseDto
 import com.team.innergrim.innergrimapi.dto.SearchMemberDto
 import com.team.innergrim.innergrimapi.enums.ErrorCode
 import com.team.innergrim.innergrimapi.enums.MemberType
+import com.team.innergrim.innergrimapi.enums.SocialType
 import com.team.innergrim.innergrimapi.exception.BusinessException
 import com.team.innergrim.innergrimapi.service.MemberDomainService
 import com.team.innergrim.innergrimapi.utils.JwtUtil
@@ -31,7 +32,8 @@ class AuthService (
         val member = memberDomainService.getMemberDetail(
                 SearchMemberDto(
                     loginId = memberLoginDto.loginId,
-                    memberType = MemberType.user
+                    socialType = memberLoginDto.socialType,
+                    memberType = MemberType.user,
                 ).specification
                 ).orElseThrow{ BusinessException(ErrorCode.NOT_FOUND, "member") }
 
@@ -59,7 +61,8 @@ class AuthService (
         val member = memberDomainService.getMemberDetail(
             SearchMemberDto(
                 loginId = adminLoginDto.loginId,
-                memberType = MemberType.admin
+                socialType = SocialType.none,
+                memberType = MemberType.admin,
             ).specification
         ).orElseThrow{ BusinessException(ErrorCode.NOT_FOUND, "admin") }
 
