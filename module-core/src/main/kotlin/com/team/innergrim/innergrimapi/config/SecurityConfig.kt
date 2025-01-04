@@ -34,16 +34,15 @@ class SecurityConfig(
             "/js/**",
             "/favicon.ico",
             "/health",
-            "/auth/member/login",
-            "/auth/admin/login",
-            "/auth/validate/access-token",
-            "/auth/issue/access-token"
         )
 
         val EXCLUDE_PATHS_POST = arrayOf(
-            "/member"
+            "/auth/member/login",
+            "/auth/admin/login",
+            "/auth/validate/access-token",
+            "/auth/issue/access-token",
+            "/member",
         )
-
     }
 
     @Bean
@@ -57,12 +56,13 @@ class SecurityConfig(
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
                     .requestMatchers(
+                        HttpMethod.GET,
                         *EXCLUDE_PATHS_GET
                     ).permitAll()
                     .requestMatchers(
                         HttpMethod.POST,
                         *EXCLUDE_PATHS_POST
-                    ).permitAll() // 회원가입은 토큰 불필요
+                    ).permitAll()
                     .anyRequest().authenticated() // 나머지 요청은 인증 필요
             }
             .authenticationProvider(daoAuthenticationProvider())
