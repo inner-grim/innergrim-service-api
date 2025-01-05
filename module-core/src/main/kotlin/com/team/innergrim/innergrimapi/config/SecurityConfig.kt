@@ -63,6 +63,10 @@ class SecurityConfig(
                         HttpMethod.POST,
                         *EXCLUDE_PATHS_POST
                     ).permitAll()
+                    .requestMatchers(
+                        HttpMethod.OPTIONS,
+                        "/**"
+                    ).permitAll()
                     .anyRequest().authenticated() // 나머지 요청은 인증 필요
             }
             .authenticationProvider(daoAuthenticationProvider())

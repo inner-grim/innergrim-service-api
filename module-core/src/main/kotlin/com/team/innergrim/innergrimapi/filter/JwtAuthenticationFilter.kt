@@ -35,6 +35,7 @@ class JwtAuthenticationFilter(
         val isExcludedPath = when (request.method) {
             "GET" -> SecurityConfig.EXCLUDE_PATHS_GET.any { AntPathMatcher().match(it, request.requestURI) }
             "POST" -> SecurityConfig.EXCLUDE_PATHS_POST.any { AntPathMatcher().match(it, request.requestURI) }
+            "OPTIONS" -> true // OPTIONS 요청은 항상 제외
             else -> false
         }
 
