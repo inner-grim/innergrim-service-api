@@ -20,7 +20,7 @@ class WebConfig(
             "/chat-bot/*",
             "/health/*",
             "/member/*",
-            "/picture-diary/*"
+            "/picture-diary/*",
         )
         registrationBean.order = 1 // 우선순위 설정
         return registrationBean
@@ -33,7 +33,8 @@ class WebConfig(
                 "http://localhost:3000",
                 "http://3.39.72.21:3000",
                 "http://innergrim-cms:3000",
-                "https://cms.innergrim.info"
+                "https://api.innergrim.info/",
+                "https://cms.innergrim.info",
             ) // 허용할 Origin
             .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메서드
             .allowedHeaders("*") // 모든 헤더 허용
