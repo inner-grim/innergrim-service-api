@@ -48,7 +48,7 @@
         </appender>
         <root level="INFO">
             <appender-ref ref="CONSOLE" />
-            <appender-ref ref="PROD-FILE" />
+            <appender-ref ref="PRD-FILE" />
         </root>
     </springProfile>
 
