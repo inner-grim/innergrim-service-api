@@ -27,7 +27,7 @@ spring:
     init:
       schema-locations: classpath*:initdata/${profile}/schema.sql
       data-locations: classpath*:initdata/${profile}/data.sql
-      mode: always
+      mode: never
   jpa:
     #jpa 사용 환경에서 data.sql을 정상적으로 동작하게 하는 옵션
     defer-datasource-initialization: true
