@@ -27,7 +27,7 @@ spring:
   sql:
     # DB초기화(schema.sql, data.sql) , [always : 기동 시 매번 동작, never : 기동 시 동작하지 않음]
     init:
-      schema-locations: classpath*:initdata/${profile}/schema.sql
+      schema-locations: classpath*:initdata/${profile}/schema.sql, classpath*:initdata/${profile}/schema-batch.sql
       data-locations: classpath*:initdata/${profile}/data.sql
       mode: always
   jpa:
@@ -45,8 +45,10 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
-  batch:
-    initialize-schema: always
+  # batch DB 생성 : always, never, embedded
+#  batch:
+#    jdbc:
+#      initialize-schema: always
 
 aws:
   s3:
