@@ -10,8 +10,13 @@ import java.util.*
 class MemberDomainService (private val memberRepository: MemberRepository) {
 
     // ::::: [GET] :::::
+
     fun getMembers (): List<Member> {
         return memberRepository.findAll()
+    }
+
+    fun getMembers (specification: Specification<Member>): List<Member> {
+        return memberRepository.findAll(specification)
     }
 
     fun getMemberDetail (id: Long): Optional<Member> {
