@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS picture_diary;
-DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS member;
+--DROP TABLE IF EXISTS picture_diary;
+--DROP TABLE IF EXISTS role;
+--DROP TABLE IF EXISTS member;
 
 CREATE TABLE IF NOT EXISTS picture_diary (
     id bigint auto_increment primary key comment 'ID',
