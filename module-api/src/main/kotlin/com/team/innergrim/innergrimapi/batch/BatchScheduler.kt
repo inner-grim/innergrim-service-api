@@ -3,6 +3,7 @@ package com.team.innergrim.innergrimapi.batch
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.JobParametersBuilder
 import org.springframework.batch.core.launch.JobLauncher
+import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -33,6 +34,7 @@ class BatchScheduler (
 //    }
 
 //    @Scheduled(cron = "0 0/5 * * * ?", zone = "Asia/Seoul")
+    @Profile("prd")
     @Scheduled(cron = "0 0 9 * * ?", zone = "Asia/Seoul")
     fun sendDailyReportDiscord () {
         try {

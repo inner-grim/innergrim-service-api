@@ -11,6 +11,7 @@ import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.repeat.RepeatStatus
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Component
 import org.springframework.transaction.PlatformTransactionManager
@@ -20,7 +21,8 @@ import java.time.LocalDate
 @EnableBatchProcessing
 class DiscordJob (
     private val cmsStatisticsService: CmsStatisticsService,
-    private val discordService: DiscordService
+    private val discordService: DiscordService,
+    @Value("\${profile}") private val activeProfile: String,
 )  {
 
     @Bean
@@ -55,7 +57,7 @@ class DiscordJob (
                 discordService.sendDiscordMessage(
                     ExternalApiRequestDto.SendDiscordMessage(
                         content = "",
-                        username = "Innergrim-Statistics-Notification",
+                        username = "Innergrim-Statistics-Notification(${activeProfile})",
                         embeds = listOf(
                             ExternalApiRequestDto.SendDiscordMessage.Embed(
                                 title = "Innergrim Statistics Sample",
