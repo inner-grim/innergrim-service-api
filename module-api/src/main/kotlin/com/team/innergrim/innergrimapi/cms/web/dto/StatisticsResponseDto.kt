@@ -1,8 +1,6 @@
 package com.team.innergrim.innergrimapi.cms.web.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
-import jakarta.validation.constraints.NotEmpty
-import java.time.LocalDate
 
 class StatisticsResponseDto {
 
@@ -15,9 +13,8 @@ class StatisticsResponseDto {
     ) { }
 
     data class PictureDiary (
-        @field:Schema(description = "requestDate", required = true)
-        @field:NotEmpty
-        val requestDate : LocalDate,
+        @field:Schema(description = "createdPictureDiaryCount")
+        val createdPictureDiaryCount : Int,
     ) { }
 
 }

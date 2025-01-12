@@ -11,28 +11,41 @@ import org.springframework.stereotype.Component
 @EnableScheduling
 class BatchScheduler (
     private val jobLauncher: JobLauncher,
-    private val samplePrintJob: Job
+    private val samplePrintJob: Job,
+    private val sendDailyReportDiscordJob: Job
+
 ) {
 
-    @Scheduled(cron = "0 59 23 * * ?")
-    fun helloWorldJob () {
+//    @Scheduled(cron = "0/5 * * * * ?")
+//    fun helloWorldJob () {
+//        try {
+//            println("Triggering samplePrintJob...")
+//            jobLauncher.run(
+//                samplePrintJob,
+//                JobParametersBuilder()
+//                .addLong("time", System.currentTimeMillis())
+//                .toJobParameters()
+//            )
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//
+//    }
+
+//    @Scheduled(cron = "0 0/5 * * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 9 * * ?", zone = "Asia/Seoul")
+    fun sendDailyReportDiscord () {
         try {
-            println("Triggering samplePrintJob...")
+            println("Triggering sendDailyReportDiscord...")
             jobLauncher.run(
-                samplePrintJob,
+                sendDailyReportDiscordJob,
                 JobParametersBuilder()
-                .addLong("time", System.currentTimeMillis())
-                .toJobParameters()
+                    .addLong("time", System.currentTimeMillis())
+                    .toJobParameters()
             )
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
-
-//    @Scheduled
-//    fun sendDailyReportDiscord () {
-//        // TODO
-//    }
 
 }

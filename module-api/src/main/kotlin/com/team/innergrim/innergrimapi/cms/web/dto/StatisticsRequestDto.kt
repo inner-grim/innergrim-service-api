@@ -17,10 +17,15 @@ class StatisticsRequestDto {
         val endDate : LocalDate,
     ) { }
 
+    @Schema(name = "pictureDiaryStatisticsRequestDto")
     data class PictureDiary (
-        @field:Schema(description = "requestDate", required = true)
+        @field:Schema(description = "startDate", required = true)
         @field:NotEmpty
-        val requestDate : LocalDate,
+        val startDate : LocalDate,
+
+        @field:Schema(description = "endDate", required = true)
+        @field:NotEmpty
+        val endDate : LocalDate,
     ) { }
 
 }

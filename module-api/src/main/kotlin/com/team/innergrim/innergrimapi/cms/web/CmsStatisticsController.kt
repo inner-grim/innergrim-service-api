@@ -25,8 +25,8 @@ class CmsStatisticsController(
 
     @Operation(summary = "생성된 그림일기 통계", description = "생성된 그림일기 통계")
     @GetMapping("/picture-diary")
-    fun getPictureDiaryStatistics(): BaseResponse<Unit> {
-        return BaseResponse.successWithoutData()
+    fun getPictureDiaryStatistics(pictureDiaryStatisticsRequestDto: StatisticsRequestDto.PictureDiary): BaseResponse<StatisticsResponseDto.PictureDiary> {
+        return BaseResponse.successWithData(cmsStatisticsService.getPictureDiaryStatistics(pictureDiaryStatisticsRequestDto))
     }
 
 

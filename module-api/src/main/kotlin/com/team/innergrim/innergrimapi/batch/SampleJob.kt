@@ -2,6 +2,7 @@ package com.team.innergrim.innergrimapi.batch
 
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
 import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.repository.JobRepository
 import org.springframework.batch.core.step.builder.StepBuilder
@@ -11,21 +12,25 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.PlatformTransactionManager
 
 @Component
-class SamplePrintJob  {
+@EnableBatchProcessing
+class SampleJob {
 
     @Bean
-    fun job (jobRepository: JobRepository, step1: Step): Job {
+    fun samplePrintJob(
+        jobRepository: JobRepository,
+        samplePrintStep1: Step
+    ): Job {
         return JobBuilder("samplePrintJob", jobRepository)
-            .start(step1)
+            .start(samplePrintStep1)
             .build()
     }
 
     @Bean
-    fun step1(jobRepository: JobRepository, transactionManager: PlatformTransactionManager): Step {
-        return StepBuilder("step1", jobRepository)
+    fun samplePrintStep1(jobRepository: JobRepository, transactionManager: PlatformTransactionManager): Step {
+        return StepBuilder("samplePrintStep1", jobRepository)
             .tasklet({ contribution, chunkContext ->
                 println("hello world job!!!")
-                RepeatStatus.FINISHED // 작업이 성공적으로 완료되었음을 알림
+                RepeatStatus.FINISHED
             }, transactionManager)
             .build()
     }
