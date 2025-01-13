@@ -53,3 +53,6 @@ aws:
 
 chatbot:
   base-url: http://innergrim-chatbot:8000
+
+discord:
+  webhook-url: https://discord.com/api/webhooks

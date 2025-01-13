@@ -33,7 +33,6 @@ class BatchScheduler (
 //
 //    }
 
-//    @Scheduled(cron = "0 0/5 * * * ?", zone = "Asia/Seoul")
     @Profile("prd")
     @Scheduled(cron = "0 0 9 * * ?", zone = "Asia/Seoul")
     fun sendDailyReportDiscord () {
