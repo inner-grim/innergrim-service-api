@@ -29,7 +29,7 @@ class SampleJob {
     fun samplePrintStep1(jobRepository: JobRepository, transactionManager: PlatformTransactionManager): Step {
         return StepBuilder("samplePrintStep1", jobRepository)
             .tasklet({ contribution, chunkContext ->
-                println("hello world job!!!")
+                println("Sample Print Job Executed!")
                 RepeatStatus.FINISHED
             }, transactionManager)
             .build()
